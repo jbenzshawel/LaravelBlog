@@ -1,0 +1,11 @@
+.post textarea {
+	height: 400px;
+}
+
+.post {
+	height: 650px;
+}
+
+.input-error {
+	border: 1px solid #a94442;
+}

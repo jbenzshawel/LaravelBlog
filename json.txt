@@ -1,0 +1,5 @@
+{
+	username: 'uatNavDev1',
+	apiKey: 'EkxTo4qRpBI4MLm9nJMi2z7CT6izXqvEGfjuNLxs',
+	cipCodes: '14.0801'
+}
