@@ -53,16 +53,13 @@ class PostsController extends  BaseController
     }
 
     // POST: /posts/createPostback
-    public function createPostback(Request $request)
+    public function createPostback($title, $content, $userID)
     {
         $status = false;
-        if($request != null) {
-            $status = true;
-        }
-    	/*if(isset($title) && isset($content) && isset($userID)) {
+    	if(isset($title) && isset($content) && isset($userID)) {
             $Posts = new Posts($title, $content, "", $userID);
             $status = $Posts::SavePost();
-        }*/
+        }
 
         return $status;
     }
