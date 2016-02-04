@@ -46,6 +46,22 @@ class PostsController extends BaseController
     	return view('posts/create', $viewData);
     }
 
+    // POST: /posts/createPostback
+    public function createPostback(Request $request)
+    {
+        $status = "false";
+        $post = $request->all();
+
+        if(isset($post["title"]) && isset($post["content"]) && isset($post["userID"])) {
+            $Posts = new Posts($post["title"], $post["content"], "", $post["userID"]);
+            if($Posts::SavePost()) {
+                $status = "true";
+            }
+        }
+
+        return $status;
+    }
+    
     // /posts/{id}
     public function getPost($id)
     {
@@ -56,19 +72,5 @@ class PostsController extends BaseController
         return view('post', $viewData);
     }
 
-    // POST: /posts/createPostback
-    public function createPostback(Request $request)
-    {
-        $status = "false";
-        $post = $request->all();
 
-    	if(isset($post["title"]) && isset($post["content"]) && isset($post["userID"])) {
-            $Posts = new Posts($post["title"], $post["content"], "", $post["userID"]);
-            if($Posts::SavePost()) {
-                $status = "true";
-            }
-        }
-
-        return $status;
-    }
 }
