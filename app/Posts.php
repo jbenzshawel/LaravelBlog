@@ -27,7 +27,6 @@ class Posts extends Model
 
     public static $userID;
 
-
     public static $posts;
 
     public static function SavePost()
