@@ -8,7 +8,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
-class PostsController extends  BaseController
+class PostsController extends BaseController
 {
 	/**
      * Create a new controller instance.
@@ -32,14 +32,8 @@ class PostsController extends  BaseController
         $viewData["user"] = Auth::user(); 
         date_default_timezone_set('America/Chicago');
         $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
-        $viewData["Posts"] = new Posts();
-        $viewData["TitleList"] = array();
-        $Posts = new Posts(); 
-        $Posts::chunk(100, function($posts, $viewData) {
-        	foreach($posts as $post) {
-        		array_push($viewData["TitleList"], $post->title);
-        	}
-        });
+        $viewData["PostList"] = Posts::ListPosts();
+
         return view('posts', $viewData);
     }
 
@@ -52,13 +46,27 @@ class PostsController extends  BaseController
     	return view('posts/create', $viewData);
     }
 
-    // POST: /posts/createPostback
-    public function createPostback($title, $content, $userID)
+    // /posts/{id}
+    public function getPost($id)
     {
-        $status = false;
-    	if(isset($title) && isset($content) && isset($userID)) {
-            $Posts = new Posts($title, $content, "", $userID);
-            $status = $Posts::SavePost();
+        $viewData = array();
+        if(isset($id)) {
+            $viewData["post"] = Posts::GetById($id);
+        }
+        return view('post', $viewData);
+    }
+
+    // POST: /posts/createPostback
+    public function createPostback(Request $request)
+    {
+        $status = "false";
+        $post = $request->all();
+
+    	if(isset($post["title"]) && isset($post["content"]) && isset($post["userID"])) {
+            $Posts = new Posts($post["title"], $post["content"], "", $post["userID"]);
+            if($Posts::SavePost()) {
+                $status = "true";
+            }
         }
 
         return $status;

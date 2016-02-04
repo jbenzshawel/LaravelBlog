@@ -25,13 +25,13 @@ class Posts extends Model
 
     public static $content;
 
-    public  static $userID;
+    public static $userID;
 
-    public static $ListPosts;
 
     public static $posts;
 
-    public  static function SavePost() {
+    public static function SavePost()
+    {
         $result = false;
 
         if(isset(self::$title) && isset(self::$content)) {
@@ -42,7 +42,6 @@ class Posts extends Model
 
                 ]);
                 $result = true;
-
             } else { // update post
                 self::$posts->where('id', self::$id)->update([
                     [ "title" => self::$title, "content" => self::$content ]
@@ -54,9 +53,35 @@ class Posts extends Model
         return $result;
     }
 
+    public static function ListPosts()
+    {
+        $titleList = DB::table('posts')->lists('id', 'title');
+        $contentList = DB::table('posts')->lists('content', 'id');
+        $postArray = array();
+        foreach($titleList as $title => $id) {
+            if(strlen($contentList[$id]) > 74) {
+                $taglineOffset = 75;
+            } else {
+                $taglineOffset= 0;
+            }
+            array_push($postArray, [
+                "id" => $id,
+                "title" => $title,
+                "content" => $contentList[$id],
+                "tagline" => substr($contentList[$id], 0, strpos($contentList[$id], ".", $taglineOffset) + 1)
+            ]);
+
+        }
+        return $postArray;
+    }
+
+    public  static function GetById($id) {
+        $post = DB::table('posts')->where("id", $id)->first();
+        return $post;
+    }
+
     public function __construct($title = "", $content = "", $id = "", $userID = "")
     {
-        self::$ListPosts = DB::table('posts')->get();;
         self::$posts = DB::table('posts');
         self::$id = $id;
         self::$title = $title;

@@ -35,8 +35,9 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/home', 'HomeController@index');
     Route::get('/posts', 'PostsController@index');
+    Route::get('/posts/{id}', 'PostsController@getPost');
     Route::get('/posts/create', 'PostsController@create');
-    Route::post('/posts/createPostback',[
+    Route::post('/posts/createPostback/', [
         'uses' => 'PostsController@createPostback', 'as' => 'createPostback'
     ]);
 

@@ -7,8 +7,13 @@
         	<div class="panel panel-default">
                 <div class="panel-heading">Posts</div>
 
-                <div class="panel-body">
-                 	
+                <div class="panel-body posts">
+                    <ul>
+                   @foreach ($PostList as $post)
+                        <li><h2><a href="/projects/LaravelBlog/public/posts/{{ $post["id"] }}">{{ $post["title"] }}</a></h2><p>{{ $post["tagline"] }}</p></li>
+                    @endforeach
+
+                    </ul>
                 </div>
             </div>
         </div>

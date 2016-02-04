@@ -6,6 +6,17 @@
 	height: 650px;
 }
 
+.posts li {
+	list-style-type: none;
+}
+.posts h2 {
+	font-weight:200;
+}
+
+.posts h2 a:hover {
+	text-decoration:none;
+	font-weight:300;
+}
 .input-error {
 	border: 1px solid #a94442;
 }

@@ -8,6 +8,7 @@
                 <div class="panel-heading">New Post</div>
 
                 <div class="panel-body post">
+                    <div id="postbackResult"></div>
                     <form class="col-md-10 col-md-offset-1">
                         <input type="hidden" name="csrf-token" value="{{ csrf_token() }}" id="crsf_token"/>
                      	<div class="form-group">
@@ -51,7 +52,7 @@
         }
         if(isValid) {
             var model = {
-                userID : userID,
+                userID : parseInt(userID, 10),
                 title : title,
                 content : content
             };
@@ -62,11 +63,16 @@
             settings.data = JSON.stringify(model),
             settings.headers = { 'X-CSRF-TOKEN' : $("#crsf_token").val() },
             settings.success = function(data) {
-                console.log(data);
+                if(data == "true") {
+                    $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
+                                              "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
+                                              "Your post has been created!</div>");
+                }
             };
             $.ajax(settings);
         }
     }
+
     $(function() {
         $("#submitPost").click(function(e) {
             e.preventDefault();
