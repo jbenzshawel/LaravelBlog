@@ -15,11 +15,10 @@
                             <label for="title">Title</label>
                             <input type="text" class="form-control" id="title" placeholder="Post Title"/>
                         </div>
-                        <div class="form-group">
-                            <label for="content">Content</label>
-                            <textarea id="content" class="form-control" placeholder="Post Content"></textarea>
-                        </div>
-                        <div class="form-group" style="text-align:center; margin-top:50px; width:100%;">
+
+                            <div id="content"></div>
+
+                        <div class="form-group center-button">
                             <button type="submit" class="btn btn-default" id="submitPost">Submit</button>
                         </div>
                     </form>
@@ -31,13 +30,14 @@
 @endsection
 
 @section('scripts')
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.5.1/summernote.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     'use strict';
     function createPost() {
         $(".error-message").remove();
         $(".input-error").removeClass("input-error");
         var title = $("#title").val(); 
-        var content = $("#content").val();
+        var content = $("#content").code();
         var userID = "{{ $user->id }}";
         var isValid = true;
         if(title.length == 0 || title == "") {
@@ -78,6 +78,8 @@
             e.preventDefault();
             createPost();
         });
+
+        $("#content").summernote({height:300});
     }) ;
 
 </script>

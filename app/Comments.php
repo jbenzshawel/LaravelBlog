@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Comments extends Model
@@ -18,10 +19,49 @@ class Comments extends Model
         'user', 'email', 'comment'
     ];
 
-     public function post()
+    public static $id;
+
+    public static $Comments;
+
+    public static $Comment;
+
+    public static $CommentList;
+
+    public static $HasParent;
+
+    public  static $ParentId;
+
+    public  function __construct($id = null, $Comment = null, $ParentId = null)
     {
-        return $this->belongsTo('Posts');
+        self::$id = $id;
+        self::$Comments = DB::table('comments');
+        self::$Comment = $Comment;
+        self::HasParent = isset($ParentId) ? true : false;
+        self::$ParentId = $ParentId;
     }
+
+    public static function GetCommentsByPostId($postId)
+    {
+        self::$CommentList = DB::table('comments')->where('PostID', $postId)->get()
+        return self::$CommentList;
+    }
+
+    public  static function SaveComment()
+    {
+        if(empty(self::$id))
+        {
+            self::$Comments->insert([
+               [ "Comment" => self::$Comment, "HasParent" => self::$HasParent, "ParentID" => self::$ParentId ]
+            ]);
+        }
+        else
+        {
+            self::$Comments->insert([
+                [ "Comment" => self::$Comment, "HasParent" => self::$HasParent, "ParentID" => self::$ParentId ]
+            ]);
+        }
+    }
+
 
     public function getApprovedAttribute($approved)
     {

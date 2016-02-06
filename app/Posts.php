@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Database\Eloquent\Model;
 
 class Posts extends Model
 {
@@ -28,6 +28,15 @@ class Posts extends Model
     public static $userID;
 
     public static $posts;
+
+    public function __construct($title = "", $content = "", $id = "", $userID = "")
+    {
+        self::$posts = DB::table('posts');
+        self::$id = $id;
+        self::$title = $title;
+        self::$content = $content;
+        self::$userID = $userID;
+    }
 
     public static function SavePost()
     {
@@ -67,24 +76,19 @@ class Posts extends Model
                 "id" => $id,
                 "title" => $title,
                 "content" => $contentList[$id],
-                "tagline" => substr($contentList[$id], 0, strpos($contentList[$id], ".", $taglineOffset) + 1)
+                "excerpt" => substr($contentList[$id], 0, strpos($contentList[$id], ".", $taglineOffset) + 1)
             ]);
 
         }
         return $postArray;
     }
 
-    public  static function GetById($id) {
+    public static function GetById($id) {
         $post = DB::table('posts')->where("id", $id)->first();
+        if(isset(self::$id)) {
+          $Posts = new Posts($post->title, $post->content, $post->id, $post->userID);
+          $post = $Posts;
+        }
         return $post;
-    }
-
-    public function __construct($title = "", $content = "", $id = "", $userID = "")
-    {
-        self::$posts = DB::table('posts');
-        self::$id = $id;
-        self::$title = $title;
-        self::$content = $content;
-        self::$userID = $userID;
     }
 }

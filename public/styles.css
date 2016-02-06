@@ -1,11 +1,19 @@
 .post textarea {
-	height: 400px;
+	display:none;
 }
 
 .post {
-	height: 650px;
+	height: 525px;
 }
 
+.center-button {
+	text-align:center;
+	margin-top:30px;
+	width:100%;
+}
+.note-style {
+	 margin-bottom: 15px;
+}
 .posts li {
 	list-style-type: none;
 }
@@ -19,4 +27,19 @@
 }
 .input-error {
 	border: 1px solid #a94442;
+}
+
+.note-editable {
+	border: 1px solid #ccc;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	border-radius:5px;}
+
+.note-editable:focus {
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	border-radius:5px;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+
 }

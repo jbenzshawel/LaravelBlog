@@ -10,7 +10,7 @@
                 <div class="panel-body posts">
                     <ul>
                    @foreach ($PostList as $post)
-                        <li><h2><a href="/projects/LaravelBlog/public/posts/{{ $post["id"] }}">{{ $post["title"] }}</a></h2><p>{{ $post["tagline"] }}</p></li>
+                        <li><h2><a href="/projects/LaravelBlog/public/post/{{ $post["id"] }}">{{ $post["title"] }}</a></h2><p>{!! $post["excerpt"] !!}</p></li>
                     @endforeach
 
                     </ul>

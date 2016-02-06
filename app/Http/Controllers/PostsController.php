@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Posts;
+use App\Comments;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -21,7 +22,7 @@ class PostsController extends BaseController
     }
 
     /**
-     * Show the application dashboard.
+     * Show posts list
      *
      * @return \Illuminate\Http\Response
      */
@@ -37,6 +38,28 @@ class PostsController extends BaseController
         return view('posts', $viewData);
     }
 
+    /**
+     * Show posts by id
+     *
+     * @param int post id
+     * @return \Illuminate\Http\Response
+     */
+    // GET: /posts/{id}
+    public function getPost($id)
+    {
+        $viewData = array();
+        if(isset($id)) {
+            $viewData["post"] = Posts::GetById($id);
+        }
+
+        return view('post', $viewData);
+    }
+
+    /**
+     * Show create post page
+     *
+     * @return \Illuminate\Http\Response
+     */
     // GET: /posts/create
     public function create() 
     {
@@ -46,31 +69,46 @@ class PostsController extends BaseController
     	return view('posts/create', $viewData);
     }
 
+    /**
+     * Postback for ajax to save a post
+     *
+     * @param \Illuminate\Http\Request
+     * @return string response
+     */
     // POST: /posts/createPostback
     public function createPostback(Request $request)
     {
         $status = "false";
         $post = $request->all();
-
-        if(isset($post["title"]) && isset($post["content"]) && isset($post["userID"])) {
-            $Posts = new Posts($post["title"], $post["content"], "", $post["userID"]);
-            if($Posts::SavePost()) {
+        if (isset($post["title"]) && isset($post["content"]) && isset($post["userID"])) {
+            if (isset($post["id"])) {
+                $Posts = new Posts($post["title"], $post["content"], $post["id"], $post["userID"]);
+            } else {
+                $Posts = new Posts($post["title"], $post["content"], "", $post["userID"]);
+            }
+            if ($Posts::SavePost()) {
                 $status = "true";
             }
         }
 
         return $status;
     }
-    
-    // /posts/{id}
-    public function getPost($id)
+
+    /**
+     * Postback for ajax to save a comment
+     *
+     * @param \Illuminate\Http\Request
+     * @return string response
+     */
+    // POST: /posts/createCommentPostback
+    public function createCommentPostback(Request $request)
     {
-        $viewData = array();
-        if(isset($id)) {
-            $viewData["post"] = Posts::GetById($id);
+        $status = "false";
+        $post = $request->all();
+        if (isset($post["name"]) && isset($post["email"]) && isset($post["content"])) {
+
         }
-        return view('post', $viewData);
+
+        return $status;
     }
-
-
 }
