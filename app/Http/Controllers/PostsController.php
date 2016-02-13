@@ -50,6 +50,7 @@ class PostsController extends BaseController
         $viewData = array();
         if(isset($id)) {
             $viewData["post"] = Posts::GetById($id);
+            $viewData["CommentsList"] = Comments::GetCommentsByPostId($id);
         }
 
         return view('post', $viewData);
@@ -104,9 +105,26 @@ class PostsController extends BaseController
     public function createCommentPostback(Request $request)
     {
         $status = "false";
-        $post = $request->all();
-        if (isset($post["name"]) && isset($post["email"]) && isset($post["content"])) {
+        $comment = $request->all();
+        if (isset($comment["PostId"]) && isset($comment["Comment"]) && isset($comment["HasParent"]) && isset($comment["Name"])) {
+            $email = isset($comment["Email"]) ? $comment["Email"] : "";
+            if(!isset($comment["CommentId"])) {
+                if (!$comment["HasParent"]) {
+                    $Comments = new Comments($comment["PostId"], null, $comment["Comment"], null, $comment["Name"], $email);
+                } else {
+                    $Comments = new Comments($comment["PostId"], null, $comment["Comment"], $comment["ParentId"], $comment["Name"], $email);
+                }
+            } else {
+                if (!$comment["HasParent"]) {
+                    $Comments = new Comments($comment["PostId"], $comment["id"], $comment["Comment"], null, $comment["Name"], $email);
+                } else {
+                    $Comments = new Comments($comment["PostId"], $comment["id"], $comment["Comment"], $comment["ParentId"], $comment["Name"], $email);
+                }
+            }
 
+            if($Comments::SaveComment()) {
+                $status = "true";
+            }
         }
 
         return $status;

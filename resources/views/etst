@@ -1,0 +1,8 @@
+
+                              {{--  @foreach($CommentsList as $comment)
+                                    <div class="comment">
+                                        <header>{{ $comment->Name }} <em> {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}</em></header>
+                                        <p>{{ $comment->Comment }}</p>
+                                        <footer><a href="#" class="reply" data-commentId="{{$comment->ID}}">reply</a></footer>
+                                    </div>
+                                @endforeach --}}

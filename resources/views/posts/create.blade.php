@@ -36,24 +36,22 @@
     function createPost() {
         $(".error-message").remove();
         $(".input-error").removeClass("input-error");
-        var title = $("#title").val(); 
+        var $title = $("#title");
         var content = $("#content").code();
         var userID = "{{ $user->id }}";
         var isValid = true;
-        if(title.length == 0 || title == "") {
-            $("#title").after("<div class=\"error-message text-danger\">The title field is required</div>"); 
-            $("#title").addClass("input-error"); 
+        if($title.val().trim().length == 0 || $title.val() == "") {
+            $title.addError("The title field is required");
             isValid = false; 
         }
-        if(content.length == 0 || content == "") {
-            $("#content").after("<div class=\"error-message text-danger\">The title content is required</div>"); 
-            $("#content").addClass("input-error"); 
+        if(content.trim().length == 0 || content == "") {
+            $("#content").addError("The title content is required");
             isValid = false;
         }
         if(isValid) {
             var model = {
                 userID : parseInt(userID, 10),
-                title : title,
+                title : $title.val(),
                 content : content
             };
             var settings = new Object(); 

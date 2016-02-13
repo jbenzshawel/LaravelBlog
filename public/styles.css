@@ -1,3 +1,6 @@
+a {
+	font-weight:200;
+}
 .post textarea {
 	display:none;
 }
@@ -42,4 +45,12 @@
 	-webkit-box-shadow: none;
 	box-shadow: none;
 
+}
+
+.comment header {
+	font-weight:200;
+}
+
+.comment p {
+	margin-bottom:0;
 }

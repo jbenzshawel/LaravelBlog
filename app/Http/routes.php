@@ -43,7 +43,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/posts/createPostback/', [
         'uses' => 'PostsController@createPostback', 'as' => 'createPostback'
     ]);
-
+    Route::post('/posts/createCommentPostback/', [
+        'uses' => 'PostsController@createCommentPostback', 'as' => 'createCommentPostback'
+    ]);
 
 
 });
