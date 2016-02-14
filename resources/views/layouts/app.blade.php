@@ -13,7 +13,6 @@
 
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
     <link href="/projects/LaravelBlog/public/styles.css" rel="stylesheet" type="text/css">
     <link href="/projects/LaravelBlog/public/summernote.css" rel = "stylesheet" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -89,7 +88,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="/projects/LaravelBlog/public/scripts/default.js"></script>
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-@yield('scripts')
+    @yield('scripts')
+
 </body>
 </html>

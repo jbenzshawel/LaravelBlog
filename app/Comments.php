@@ -50,18 +50,36 @@ class Comments extends Model
         self::$Email = $email;
     }
 
+    public static function GetAllComments()
+    {
+        self::$CommentList = DB::table('comments')->get();
+        return self::$CommentList;
+    }
+
     public static function GetCommentsByPostId($postId)
     {
         if(DB::table('comments')->where('PostID', $postId)->count() > 0) {
             self::$CommentList = DB::table('comments')->where('PostID', $postId)->get();
         } else {
-            self::$CommentsList = null;
+            self::$CommentList = null;
         }
         return self::$CommentList;
     }
 
+    public static function ApproveComment($commentId)
+    {
+        if( DB::table('comments')->where('ID', $commentId)->count() > 0) {
+            DB::table('comments')->where('ID', $commentId)->update([
+                "Approved" => true
+            ]);
+            return true;
+        }
+        return false;
+    }
+
     public static function SaveComment()
     {
+
         $date = date("Y-m-d H:i:s");
         $comment = [
             "PostID" => self::$PostId,

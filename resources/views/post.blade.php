@@ -46,9 +46,9 @@
                         </div>
 
                         <div class="comment-list col-md-10 col-md-offset-1" id="listComments">
-                            @if($CommentsList != null && count($CommentsList) > 0)
+                            @if($CommentsList != null)
                                 @foreach($CommentsList as $comment)
-                                    @if(isset($comment))
+                                    @if(isset($comment) && $comment->Approved)
                                     <div class="comment">
                                         <header>{{ $comment->Name }} <em> {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}</em></header>
                                         <p>{{ $comment->Comment }}</p>
@@ -110,7 +110,7 @@
             settings.data = JSON.stringify(model),
                     settings.headers = { 'X-CSRF-TOKEN' : $("#csrf_token").val() },
                     settings.success = function(data) {
-                        if(data == "true") {
+                        if(data == true) {
                             $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
                                     "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
                                     "Your comment has been created!</div>");
@@ -144,34 +144,19 @@
             $("[data-commentId=" + replyId + "]").show();
             clearErrors(true, "createComment");
         });
-
-        $("#saveComment").click(function (e) {
-            e.preventDefault();
-            createComment();
-        })
-        $("#name").change(function() {
-           if(this.value != "") {
-               $(this).removeClass("input-error");
-               $(".name.error-message").remove();
-           }
-        });
-        $("#email").change(function() {
-            if(validateEmail(this.value)) {
-                $(this).removeClass("input-error");
-                $(".email.error-message").remove();
-            }
-        });
-        $("#comment").change(function() {
-            if(this.value != "") {
-                $(this).removeClass("input-error");
-                $(".comment.error-message").remove();
-            }
-        });
-        $(".reply").click(function(e) {
+        $(document).on('click', '.reply', function(e) {
             e.preventDefault();
             $(this).after('<form id="replyComment" data-replyId="' + $(this).attr("data-commentId") + '">' + $("#createComment").html() + '</form>');
             $(this).hide();
-        })
+        });
+        $("#saveComment").click(function (e) {
+            e.preventDefault();
+            createComment();
+        });
+        var fieldIds = [ "#name", "#email", "#comment" ];
+        for (var i = 0, field; field = fieldIds[i++];) {
+            updateInputField(field);
+        }
     });
 </script>
 

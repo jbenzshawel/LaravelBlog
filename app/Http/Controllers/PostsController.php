@@ -31,7 +31,6 @@ class PostsController extends BaseController
     {
         $viewData = array(); 
         $viewData["user"] = Auth::user(); 
-        date_default_timezone_set('America/Chicago');
         $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
         $viewData["PostList"] = Posts::ListPosts();
 
@@ -104,7 +103,7 @@ class PostsController extends BaseController
     // POST: /posts/createCommentPostback
     public function createCommentPostback(Request $request)
     {
-        $status = "false";
+        $status = false;
         $comment = $request->all();
         if (isset($comment["PostId"]) && isset($comment["Comment"]) && isset($comment["HasParent"]) && isset($comment["Name"])) {
             $email = isset($comment["Email"]) ? $comment["Email"] : "";
@@ -123,10 +122,17 @@ class PostsController extends BaseController
             }
 
             if($Comments::SaveComment()) {
-                $status = "true";
+                $status = true;
             }
         }
 
         return $status;
+    }
+
+    public function approveCommentPostback()
+    {
+
+        $comment = $request->all();
+
     }
 }

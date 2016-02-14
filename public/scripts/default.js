@@ -18,6 +18,15 @@ function clearErrors(clearText, formId) {
     $(".error-message").remove();
 }
 
+function updateInputField(field) {
+    $(field).change(function() {
+        if(this.value != "") {
+            $(this).removeClass("input-error");
+            $("." + field.substring(1) + ".error-message").remove();
+        }
+    });
+}
+
 $(function() {
     $.fn.addError = function(errorMsg, field) {
         if (field == undefined) field = "";
