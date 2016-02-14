@@ -55,7 +55,7 @@ class Comments extends Model
         if(DB::table('comments')->where('PostID', $postId)->count() > 0) {
             self::$CommentList = DB::table('comments')->where('PostID', $postId)->get();
         } else {
-            self::$CommentsList = "null";
+            self::$CommentsList = null;
         }
         return self::$CommentList;
     }
