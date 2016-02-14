@@ -76,9 +76,7 @@ class Comments extends Model
         {
             self::$Comments->insert([ $comment ]);
             return true;
-        }
-        else
-        {
+        } else {
             self::$Comments->where("ID", self::$id)->update([ $comment ]);
             return true;
         }
