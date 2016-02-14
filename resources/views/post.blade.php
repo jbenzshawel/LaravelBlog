@@ -46,7 +46,7 @@
                         </div>
 
                         <div class="comment-list col-md-10 col-md-offset-1" id="listComments">
-                            @if($CommentsList != null && count($CommentsList) > 1)
+                            @if($CommentsList != null && count($CommentsList) > 0)
                                 @foreach($CommentsList as $comment)
                                     @if(isset($comment))
                                     <div class="comment">
@@ -54,7 +54,7 @@
                                         <p>{{ $comment->Comment }}</p>
                                         <footer><a href="#" class="reply" data-commentId="{{$comment->ID}}">reply</a></footer>
                                     </div>
-                                        @endif
+                                    @endif
                                 @endforeach
                             @endif
                         </div>
@@ -74,8 +74,7 @@
             parentId = null;
             hasParent = false;
         }
-        $(".error-message").remove();
-        $(".input-error").removeClass("input-error");
+        clearErrors();
         var $name = $("#name");
         var $email = $("#email");
         var $comment = $("#comment");
@@ -119,7 +118,7 @@
                                     '<div class="comment">' +
                                     '<header>' + $name.val() + ' <em>just now</em></header>' +
                                     '<p>' + $comment.val() + '</p>' +
-                                    '<footer><a href="#" class="reply" data-commentId="{{$comment->ID}}">reply</a></footer>' +
+                                    '<footer><a href="#" class="reply" data-commentId="">reply</a></footer>' +
                                     '</div>'
                             );
                             $("#createComment").hide();
@@ -143,6 +142,7 @@
             var replyId = $("[id=replyComment]:visible").attr("data-replyId");
             $("[id=replyComment]:visible").hide();
             $("[data-commentId=" + replyId + "]").show();
+            clearErrors(true, "createComment");
         });
 
         $("#saveComment").click(function (e) {

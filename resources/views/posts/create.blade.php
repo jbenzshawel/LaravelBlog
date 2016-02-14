@@ -34,8 +34,7 @@
 <script type="text/javascript">
     'use strict';
     function createPost() {
-        $(".error-message").remove();
-        $(".input-error").removeClass("input-error");
+        clearErrors();
         var $title = $("#title");
         var content = $("#content").code();
         var userID = "{{ $user->id }}";
