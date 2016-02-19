@@ -13,7 +13,6 @@
                         <h2>Comments</h2>
                         <div class="new-comment">
                             <div id="postbackResult"></div>
-                            <a href="#" id="newComment">New Comment</a>
                             <form class="col-md-8 col-md-offset-2" id="createComment">
                                 <div class="form-group">
                                     <button type="button" class="close hideComment" alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -46,7 +45,9 @@
                         </div>
 
                         <div class="comment-list col-md-10 col-md-offset-1" id="listComments">
-                            @if($CommentsList != null)
+                            <a href="#" id="newComment" style="font-weight: 300">New Comment</a>
+
+                        @if($CommentsList != null)
                                 @foreach($CommentsList as $comment)
                                     @if(isset($comment) && $comment->Approved)
                                     <div class="comment">
@@ -107,22 +108,22 @@
             settings.url = "/projects/LaravelBlog/public/posts/createCommentPostback";
             settings.type = "POST";
             settings.contentType = "application/json";
-            settings.data = JSON.stringify(model),
-                    settings.headers = { 'X-CSRF-TOKEN' : $("#csrf_token").val() },
-                    settings.success = function(data) {
-                        if(data == true) {
-                            $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
-                                    "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
-                                    "Your comment has been created!</div>");
-                            $("#listComments").prepend(
-                                    '<div class="comment">' +
-                                    '<header>' + $name.val() + ' <em>just now</em></header>' +
-                                    '<p>' + $comment.val() + '</p>' +
-                                    '<footer><a href="#" class="reply" data-commentId="">reply</a></footer>' +
-                                    '</div>'
-                            );
-                            $("#createComment").hide();
-                        }
+            settings.data = JSON.stringify(model);
+            settings.headers = { 'X-CSRF-TOKEN' : $("#csrf_token").val() };
+            settings.success = function(data) {
+                if(data == "true") {
+                    $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
+                            "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
+                            "Your comment has been created!</div>");
+                    $("#listComments").prepend(
+                            '<div class="comment">' +
+                            '<header>' + $name.val() + ' <em>just now</em></header>' +
+                            '<p>' + $comment.val() + '</p>' +
+                            '<footer><a href="#" class="reply" data-commentId="">reply</a></footer>' +
+                            '</div>'
+                    );
+                    $("#createComment").hide();
+                }
                     };
             $.ajax(settings);
         }

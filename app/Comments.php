@@ -58,6 +58,7 @@ class Comments extends Model
 
     public static function GetCommentsByPostId($postId)
     {
+        if(!isset($postId)) $postId = selef::$PostId;
         if(DB::table('comments')->where('PostID', $postId)->count() > 0) {
             self::$CommentList = DB::table('comments')->where('PostID', $postId)->get();
         } else {
@@ -68,6 +69,7 @@ class Comments extends Model
 
     public static function ApproveComment($commentId)
     {
+        if(!isset($commentId)) $commentId = self::$id;
         if( DB::table('comments')->where('ID', $commentId)->count() > 0) {
             DB::table('comments')->where('ID', $commentId)->update([
                 "Approved" => true
@@ -77,6 +79,13 @@ class Comments extends Model
         return false;
     }
 
+    public static function DeleteComment($commentId) {
+        if(!isset($commentId)) $commentId = self::$id;
+        if (DB::table('comments')->where('ID', $commentId)->count() > 0) {
+            DB::table('comments')->where('ID', $commentId)->delete();
+        }
+
+    }
     public static function SaveComment()
     {
 

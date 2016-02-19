@@ -103,7 +103,7 @@ class PostsController extends BaseController
     // POST: /posts/createCommentPostback
     public function createCommentPostback(Request $request)
     {
-        $status = false;
+        $status = "false";
         $comment = $request->all();
         if (isset($comment["PostId"]) && isset($comment["Comment"]) && isset($comment["HasParent"]) && isset($comment["Name"])) {
             $email = isset($comment["Email"]) ? $comment["Email"] : "";
@@ -122,17 +122,32 @@ class PostsController extends BaseController
             }
 
             if($Comments::SaveComment()) {
-                $status = true;
+                $status = "true";
             }
         }
 
         return $status;
     }
 
-    public function approveCommentPostback()
+    public function approveCommentPostback(Request $request)
     {
-
         $comment = $request->all();
+        if (isset($comment["commentId"])) {
+            $status = Comments::ApproveComment($comment["commentId"]);
+            if ($status)
+            return "true";
+        }
+        return "false";
+    }
 
+    public function deleteCommentPostback(Request $request)
+    {
+        $comment = $request->all();
+        if (isset($comment["commentId"])) {
+            $status = Comments::DeleteComment($comment["commentId"]);
+            if ($status)
+                return "true";
+        }
+        return "false";
     }
 }

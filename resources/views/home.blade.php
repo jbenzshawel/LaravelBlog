@@ -13,6 +13,7 @@
                  	<p>Your email: {{ $user->email }}</p>
                  	<p>Last updated: {{ $lastUpdated }}</p>
                     <h2>Approve Comments</h2>
+                    <div id="resMsg"></div>
                     <table id="commentsTable" class="display table">
                         <thead>
                             <tr>
@@ -32,7 +33,7 @@
                             @foreach($CommentList as $comment)
                                 <tr>
                                     <td>
-                                        <input type="checkbox" value="{{ $comment->ID }}" name="comment">
+                                        <input type="checkbox" value="{{ $comment->ID }}" name="comment" {{ filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  'checked=true' :  '' }}">
                                     </td>
                                     <td>
                                         <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
@@ -46,6 +47,7 @@
                         </tbody>
                     </table>
                     <div class="form-group">
+                        <input type="hidden" name="csrf-token" value="{{ csrf_token() }}" id="csrf_token"/>
                         <button class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm">Delete Selected</button>
                         <button class="btn btn-success" id="approveComments">Approve Selected</button>
                     </div>
@@ -93,20 +95,23 @@
 @section('scripts')
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script type="text/javascript">
+        "use strict";
+        window.localStorage.clear();
+        window.alertSuccess = '<div class="alert alert-success alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<strong>Success!</strong> Comments status have been updated.' +
+                '</div>';
         function approveComment(commentId) {
             if(!isNaN(parseInt(commentId, 10))) {
                 var settings = new Object();
                 settings.url = "/projects/LaravelBlog/public/posts/approveCommentPostback";
-                settings.type = "POST";
-                settings.contentType = "application/json";
                 settings.data = JSON.stringify({ commentId: parseInt(commentId, 10) });
-                settings.async = false;
                 settings.success = function(data) {
-                    if(data == true) {
-                        return true;
+                    if(data == "true") {
+                        $("#resMsg").html(window.alertSuccess);
                     }
                 };
-                $.ajax(settings);
+                ajaxPost(settings, false, $("#csrf_token").val() );
             }
             return false;
         }
@@ -114,16 +119,13 @@
             if(!isNaN(parseInt(commentId, 10))) {
                 var settings = new Object();
                 settings.url = "/projects/LaravelBlog/public/posts/deleteCommentPostback";
-                settings.type = "POST";
-                settings.contentType = "application/json";
                 settings.data = JSON.stringify({ commentId: parseInt(commentId, 10) });
-                settings.async = false;
                 settings.success = function(data) {
                     if(data.status = "success") {
                         return true;
                     }
                 };
-                $.ajax(settings);
+                ajaxPost(settings, false, $("#csrf_token").val() );
             }
             return false;
         }
@@ -136,14 +138,14 @@
             });
             $("#approveComments").click(function(e) {
                 e.preventDefault();
-                var selectedCount = $("input[name=comment]:checked").length;
-                var count = 0;
-                $("input[name=coment]:checked").each(function() {
-                   if(approveComment(this.value)) {
-                       count++;
+                $("input[type='checkbox']:checked").each(function() {
+                   if(this.value != "") {
+                       approveComment(this.value);
                    }
                 });
-                if(selectedCount == count) {
+            });
+            $("input[type='checkbox']").change(function() {
+                if($(this).attr("checked") == "checked") {
 
                 }
             });

@@ -9,7 +9,7 @@ function validateEmail(email) {
 }
 
 function clearErrors(clearText, formId) {
-    if(clearText == undefined) clearText = false;
+    if (clearText == undefined) clearText = false;
     if (clearText) {
         var form = document.getElementById(formId);
         form.reset();
@@ -25,6 +25,18 @@ function updateInputField(field) {
             $("." + field.substring(1) + ".error-message").remove();
         }
     });
+}
+
+function ajaxPost(settings, async, csrfToken) {
+    if (async == undefined) async = true;
+    if (csrfToken == undefined) return false;
+    if (typeof(settings) === 'object') {
+        settings.headers = { 'X-CSRF-TOKEN' : csrfToken};
+        settings.type = 'POST';
+        settings.contentType = 'application/json';
+        settings.async = async;
+        $.ajax(settings);
+    }
 }
 
 $(function() {

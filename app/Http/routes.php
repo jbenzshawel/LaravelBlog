@@ -40,7 +40,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/posts', 'PostsController@index');
     Route::get('/posts/create', 'PostsController@create');
 
-    Route::post('/posts/approveCommentPostback', 'PostsController@approveComentPostback');
+    Route::post('/posts/approveCommentPostback', 'PostsController@approveCommentPostback');
+    Route::post('/posts/deleteCommentPostback', 'PostsController@deleteCommentPostback');
     Route::post('/posts/createPostback/', [
         'uses' => 'PostsController@createPostback', 'as' => 'createPostback'
     ]);
