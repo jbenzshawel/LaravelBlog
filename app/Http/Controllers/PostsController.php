@@ -140,6 +140,17 @@ class PostsController extends BaseController
         return "false";
     }
 
+    public function unapproveCommentPostback(Request $request)
+    {
+        $comment = $request->all();
+        if (isset($comment["commentId"])) {
+            $status = Comments::UnApproveComment($comment["commentId"]);
+            if ($status)
+                return "true";
+        }
+        return "false";
+    }
+
     public function deleteCommentPostback(Request $request)
     {
         $comment = $request->all();

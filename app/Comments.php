@@ -79,12 +79,25 @@ class Comments extends Model
         return false;
     }
 
+    public static function UnApproveComment($commentId)
+    {
+        if(!isset($commentId)) $commentId = self::$id;
+        if( DB::table('comments')->where('ID', $commentId)->count() > 0) {
+            DB::table('comments')->where('ID', $commentId)->update([
+                "Approved" => false
+            ]);
+            return true;
+        }
+        return false;
+    }
+
     public static function DeleteComment($commentId) {
         if(!isset($commentId)) $commentId = self::$id;
         if (DB::table('comments')->where('ID', $commentId)->count() > 0) {
             DB::table('comments')->where('ID', $commentId)->delete();
+            return true;
         }
-
+        return false;
     }
     public static function SaveComment()
     {

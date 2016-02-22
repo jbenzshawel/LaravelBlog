@@ -18,7 +18,13 @@
                         <thead>
                             <tr>
                                 <th>
-                                    Approve
+                                    &nbsp;
+                                </th>
+                                <th>
+                                    Approved
+                                </th>
+                                <th>
+                                    Post ID
                                 </th>
                                 <th>
                                     Commenter
@@ -33,7 +39,13 @@
                             @foreach($CommentList as $comment)
                                 <tr>
                                     <td>
-                                        <input type="checkbox" value="{{ $comment->ID }}" name="comment" {{ filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  'checked=true' :  '' }}">
+                                        <input type="checkbox" value="{{ $comment->ID }}" name="comment">
+                                    </td>
+                                    <td class="center-text">
+                                        {!! filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' :  '' !!}
+                                    </td>
+                                    <td>
+                                        {{ $comment->PostID }}
                                     </td>
                                     <td>
                                         <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
@@ -49,6 +61,7 @@
                     <div class="form-group">
                         <input type="hidden" name="csrf-token" value="{{ csrf_token() }}" id="csrf_token"/>
                         <button class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm">Delete Selected</button>
+                        <button class="btn btn-warning" id="unapproveComments">Hide Selected</button>
                         <button class="btn btn-success" id="approveComments">Approve Selected</button>
                     </div>
                 </div>
@@ -77,15 +90,15 @@
             </div><!-- /.modal -->
         @endforeach
     @endif
-    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal fade bs-example-modal-sm" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-body">
                 Are you sure you want to delete the selected comments?
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="yesDelete">Yes</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-default" id="yesDelete">Yes</button>
                 </div>
             </div>
         </div>
@@ -96,39 +109,52 @@
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         "use strict";
-        window.localStorage.clear();
         window.alertSuccess = '<div class="alert alert-success alert-dismissible" role="alert">' +
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
                 '<strong>Success!</strong> Comments status have been updated.' +
                 '</div>';
+        function sendCommentId(url, commentId, csrfToken) {
+            if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
+            var settings = new Object();
+            settings.url = url;
+            settings.data = JSON.stringify({ commentId: parseInt(commentId, 10) });
+            settings.success = function(data) {
+                if(data == "true") {
+                    if (url.indexOf("unapprove") > 0) {
+                        $("input[value='" + commentId + "']").parent().closest('td').next('td').html('');
+                    } else if (url.indexOf("approve") > 0) {
+                        $("input[value='" + commentId + "']").parent().closest('td').next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+                    } else if (url.indexOf("delete") > 0) {
+                        $("input[value='" + commentId + "']").parent().parent().remove();
+                    }
+                    $("input[type='checkbox']").prop("checked", false);
+                    return true;
+                }
+            };
+            ajaxPost(settings, false, csrfToken);
+        }
         function approveComment(commentId) {
             if(!isNaN(parseInt(commentId, 10))) {
-                var settings = new Object();
-                settings.url = "/projects/LaravelBlog/public/posts/approveCommentPostback";
-                settings.data = JSON.stringify({ commentId: parseInt(commentId, 10) });
-                settings.success = function(data) {
-                    if(data == "true") {
-                        $("#resMsg").html(window.alertSuccess);
-                    }
-                };
-                ajaxPost(settings, false, $("#csrf_token").val() );
+                sendCommentId("/projects/LaravelBlog/public/posts/approveCommentPostback", commentId);
+                return true;
+            }
+            return false;
+        }
+        function unapproveComment(commentId) {
+            if(!isNaN(parseInt(commentId, 10))) {
+                sendCommentId("/projects/LaravelBlog/public/posts/unapproveCommentPostback", commentId);
+                return true;
             }
             return false;
         }
         function deleteComment(commentId) {
             if(!isNaN(parseInt(commentId, 10))) {
-                var settings = new Object();
-                settings.url = "/projects/LaravelBlog/public/posts/deleteCommentPostback";
-                settings.data = JSON.stringify({ commentId: parseInt(commentId, 10) });
-                settings.success = function(data) {
-                    if(data.status = "success") {
-                        return true;
-                    }
-                };
-                ajaxPost(settings, false, $("#csrf_token").val() );
+                sendCommentId("/projects/LaravelBlog/public/posts/deleteCommentPostback", commentId);
+                return true;
             }
             return false;
         }
+
         $(function() {
             $('#commentsTable').DataTable();
             $(".showComment").click(function(e) {
@@ -144,11 +170,24 @@
                    }
                 });
             });
-            $("input[type='checkbox']").change(function() {
-                if($(this).attr("checked") == "checked") {
-
-                }
+            $("#unapproveComments").click(function(e) {
+                e.preventDefault();
+                $("input[type='checkbox']:checked").each(function() {
+                    if(this.value != "") {
+                        unapproveComment(this.value);
+                    }
+                });
             });
+            $("#yesDelete").click(function(e) {
+                e.preventDefault();
+                $("input[type='checkbox']:checked").each(function() {
+                    if(this.value != "") {
+                        deleteComment(this.value);
+                    }
+                });
+                $("#confirmDeleteModal").modal('hide');
+            })
+
         });
     </script>
 @endsection

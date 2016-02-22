@@ -106,26 +106,16 @@
             };
             var settings = new Object();
             settings.url = "/projects/LaravelBlog/public/posts/createCommentPostback";
-            settings.type = "POST";
-            settings.contentType = "application/json";
             settings.data = JSON.stringify(model);
-            settings.headers = { 'X-CSRF-TOKEN' : $("#csrf_token").val() };
             settings.success = function(data) {
                 if(data == "true") {
                     $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
                             "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
-                            "Your comment has been created!</div>");
-                    $("#listComments").prepend(
-                            '<div class="comment">' +
-                            '<header>' + $name.val() + ' <em>just now</em></header>' +
-                            '<p>' + $comment.val() + '</p>' +
-                            '<footer><a href="#" class="reply" data-commentId="">reply</a></footer>' +
-                            '</div>'
-                    );
+                            "Your comment has been created! Once it has been reviewed it will be displayed.</div>");
                     $("#createComment").hide();
                 }
-                    };
-            $.ajax(settings);
+            };
+            ajaxPost(settings, true, $("#csrf_token").val());
         }
     }
 

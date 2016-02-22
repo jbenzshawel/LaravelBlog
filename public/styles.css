@@ -54,3 +54,11 @@ h2 a:hover {
 .comment p {
 	margin-bottom:0;
 }
+
+.glyphicon-ok {
+	color:#008800;
+}
+
+.center-text {
+	text-align: center;
+}

@@ -55,10 +55,7 @@
             };
             var settings = new Object(); 
             settings.url = "/projects/LaravelBlog/public/posts/createPostback";
-            settings.type = "POST";
-            settings.contentType = "application/json";
             settings.data = JSON.stringify(model),
-            settings.headers = { 'X-CSRF-TOKEN' : $("#crsf_token").val() },
             settings.success = function(data) {
                 if(data == "true") {
                     $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
@@ -66,7 +63,7 @@
                                               "Your post has been created!</div>");
                 }
             };
-            $.ajax(settings);
+            ajaxPost(settings, true, $("#crsf_token").val());
         }
     }
 
