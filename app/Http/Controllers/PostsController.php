@@ -129,36 +129,60 @@ class PostsController extends BaseController
         return $status;
     }
 
+    /**
+     * Postback for approving a comment
+     *
+     * @param Request $request
+     * @return string true or false of action (laravel requires response to be string)
+     */
     public function approveCommentPostback(Request $request)
     {
-        $comment = $request->all();
-        if (isset($comment["commentId"])) {
-            $status = Comments::ApproveComment($comment["commentId"]);
-            if ($status)
+        if($this->updateComment($request, "ApproveComment"))
             return "true";
-        }
         return "false";
     }
 
+    /**
+     * Postback for un-approving a comment
+     *
+     * @param Request $request
+     * @return string true or false of action (laravel requires response to be string)
+     */
     public function unapproveCommentPostback(Request $request)
     {
-        $comment = $request->all();
-        if (isset($comment["commentId"])) {
-            $status = Comments::UnApproveComment($comment["commentId"]);
-            if ($status)
-                return "true";
-        }
+        if($this->updateComment($request, "UnApproveComment"))
+            return "true";
         return "false";
     }
 
+    /**
+     * Postback for deleting a comment
+     *
+     * @param Request $request
+     * @return string true or false of action (laravel requires response to be string)
+     */
     public function deleteCommentPostback(Request $request)
     {
+        if($this->updateComment($request, "DeleteComment"))
+            return "true";
+        return "false";
+    }
+
+    /**
+     * Private function for updating comments.
+     *
+     * @param Request $request
+     * @param $callbackAction is the string name of the static function in the Comments object
+     * @return bool response of callback function
+     */
+    private function updateComment(Request $request, $callbackAction) {
+        $class = 'App\Comments';
         $comment = $request->all();
         if (isset($comment["commentId"])) {
-            $status = Comments::DeleteComment($comment["commentId"]);
-            if ($status)
-                return "true";
+           $status = call_user_func_array(array($class, $callbackAction), array($comment["commentId"]));
+           if($status)
+               return true;
         }
-        return "false";
+        return false;
     }
 }
