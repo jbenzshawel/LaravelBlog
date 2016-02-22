@@ -9,60 +9,130 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                 	<p>Hello {{ $user->name }}</p>
-                 	<p>Your email: {{ $user->email }}</p>
-                 	<p>Last updated: {{ $lastUpdated }}</p>
-                    <h2>Approve Comments</h2>
-                    <div id="resMsg"></div>
-                    <table id="commentsTable" class="display table">
-                        <thead>
+                    <input type="hidden" name="csrf-token" value="{{ csrf_token() }}" id="csrf_token"/>
+                    <div class="account-section">
+                        <h2>Your Account</h2>
+                        <dl class="dl-horizontal">
+                            <dt>Name:</dt>
+                            <dd>{{ $user->name }} <a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+
+                            <dt>Email:</dt>
+                            <dd>{{ $user->email }} <a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+
+                            <dt>Last updated:</dt>
+                            <dd>{{ $lastUpdated }} <a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+                        </dl>
+                    </div>
+                    <div class="posts-section">
+                        <h2>Manage Posts</h2>
+                        <table id="postsTable" class="display table">
+                            <thead>
                             <tr>
                                 <th>
                                     &nbsp;
                                 </th>
                                 <th>
-                                    Approved
+                                    Visible
                                 </th>
                                 <th>
                                     Post ID
                                 </th>
                                 <th>
-                                    Commenter
+                                    Post Title
                                 </th>
                                 <th>
-                                    Date
+                                    Date Created
+                                </th>
+                                <th>
+                                    Last Updated
                                 </th>
                             </tr>
-                        </thead>
-                        <tbody>
-                        @if(isset($CommentList))
-                            @foreach($CommentList as $comment)
+                            </thead>
+                            <tbody>
+                            @if(isset($PostsList))
+                                @foreach($PostsList as $post)
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" value="{{ $post["id"] }}" name="post">
+                                        </td>
+                                        <td class="center-text">
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                        </td>
+                                        <td>
+                                            {{ $post["id"] }}
+                                        </td>
+                                        <td>
+                                            <a href="#" class="showComment" data-commentId="{{ $post["id"] }}">{{ $post["title"] }}</a>
+                                        </td>
+                                        <td>
+                                            {{ date('F d, Y h:i:s A', strtotime($post["dateCreated"])) }}
+                                        </td>
+                                        <td>
+                                            {{--date('F d, Y h:i:s A', strtotime($post["lastUpdated"])) --}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <button class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm">Delete Selected</button>
+                            <button class="btn btn-warning" id="unapprovePosts">Hide Selected</button>
+                            <button class="btn btn-success" id="approvePosts">Show Selected</button>
+                        </div>
+                    </div>
+                    <div class="comments-section">
+                        <h2>Approve Comments</h2>
+                        <div id="resMsg"></div>
+                        <table id="commentsTable" class="display table">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" value="{{ $comment->ID }}" name="comment">
-                                    </td>
-                                    <td class="center-text">
-                                        {!! filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' :  '' !!}
-                                    </td>
-                                    <td>
-                                        {{ $comment->PostID }}
-                                    </td>
-                                    <td>
-                                        <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
-                                    </td>
-                                    <td>
-                                        {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}
-                                    </td>
+                                    <th>
+                                        &nbsp;
+                                    </th>
+                                    <th>
+                                        Approved
+                                    </th>
+                                    <th>
+                                        Post ID
+                                    </th>
+                                    <th>
+                                        Commenter
+                                    </th>
+                                    <th>
+                                        Date
+                                    </th>
                                 </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                    </table>
-                    <div class="form-group">
-                        <input type="hidden" name="csrf-token" value="{{ csrf_token() }}" id="csrf_token"/>
-                        <button class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm">Delete Selected</button>
-                        <button class="btn btn-warning" id="unapproveComments">Hide Selected</button>
-                        <button class="btn btn-success" id="approveComments">Approve Selected</button>
+                            </thead>
+                            <tbody>
+                            @if(isset($CommentList))
+                                @foreach($CommentList as $comment)
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" value="{{ $comment->ID }}" name="comment">
+                                        </td>
+                                        <td class="center-text">
+                                            {!! filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' :  '' !!}
+                                        </td>
+                                        <td>
+                                            {{ $comment->PostID }}
+                                        </td>
+                                        <td>
+                                            <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
+                                        </td>
+                                        <td>
+                                            {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <button class="btn btn-danger" data-toggle="modal" id="deleteCommenttModal">Delete Selected</button>
+                            <button class="btn btn-warning" id="unapproveComments">Hide Selected</button>
+                            <button class="btn btn-success" id="approveComments">Approve Selected</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -111,7 +181,11 @@
         "use strict";
         window.alertSuccess = '<div class="alert alert-success alert-dismissible" role="alert">' +
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                '<strong>Success!</strong> Comments status have been updated.' +
+                '<strong>Success!</strong> Comment(s) status have been updated.' +
+                '</div>';
+        window.alertDelete = '<div class="alert alert-success alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<strong>Success!</strong> Comment(s) have been deleted.' +
                 '</div>';
         function sendCommentId(url, commentId, csrfToken) {
             if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
@@ -122,10 +196,13 @@
                 if(data == "true") {
                     if (url.indexOf("unapprove") > 0) {
                         $("input[value='" + commentId + "']").parent().closest('td').next('td').html('');
+                        $("#resMsg").html(window.alertSuccess);
                     } else if (url.indexOf("approve") > 0) {
                         $("input[value='" + commentId + "']").parent().closest('td').next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+                        $("#resMsg").html(window.alertSuccess);
                     } else if (url.indexOf("delete") > 0) {
                         $("input[value='" + commentId + "']").parent().parent().remove();
+                        $("#resMsg").html(window.alertDelete);
                     }
                     $("input[type='checkbox']").prop("checked", false);
                     return true;
@@ -157,6 +234,7 @@
 
         $(function() {
             $('#commentsTable').DataTable();
+            $('#postsTable').DataTable();
             $(".showComment").click(function(e) {
                 e.preventDefault();
                 var id = $(this).attr("data-commentId");
@@ -187,7 +265,12 @@
                 });
                 $("#confirmDeleteModal").modal('hide');
             })
-
+            $("#deleteCommenttModal").click(function(e) {
+                e.preventDefault();
+                if($("input[name='comment']:checked").size() > 0) {
+                    $("#confirmDeleteModal").modal('show');
+                }
+            });
         });
     </script>
 @endsection

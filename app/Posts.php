@@ -65,6 +65,8 @@ class Posts extends Model
     {
         $titleList = DB::table('posts')->lists('id', 'title');
         $contentList = DB::table('posts')->lists('content', 'id');
+        $dateList = DB::table('posts')->lists('created_at', 'id');
+        $updatedList = DB::table('posts')->lists('updated_at', 'id');
         $postArray = array();
         foreach($titleList as $title => $id) {
             if(strlen($contentList[$id]) > 74) {
@@ -76,7 +78,9 @@ class Posts extends Model
                 "id" => $id,
                 "title" => $title,
                 "content" => $contentList[$id],
-                "excerpt" => substr($contentList[$id], 0, strpos($contentList[$id], ".", $taglineOffset) + 1)
+                "excerpt" => substr($contentList[$id], 0, strpos($contentList[$id], ".", $taglineOffset) + 1),
+                "dateCreated" => $dateList[$id],
+                "lastUpdated" => $updatedList[$id]
             ]);
 
         }

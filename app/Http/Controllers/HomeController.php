@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Posts;
 use App\Comments;
 use App\Http\Requests;
 use Auth;
@@ -32,6 +33,7 @@ class HomeController extends Controller
         date_default_timezone_set('America/Chicago');
         $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
         $viewData["CommentList"] = Comments::GetAllComments();
+        $viewData["PostsList"] = Posts::ListPosts();
         return view('home', $viewData);
     }
 }

@@ -56,9 +56,17 @@ h2 a:hover {
 }
 
 .glyphicon-ok {
-	color:#008800;
+	color:#5cb85c;
 }
 
 .center-text {
 	text-align: center;
+}
+
+#postsTable_filter, #commentsTable_filter {
+	display: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	padding: 0 !important;
 }
