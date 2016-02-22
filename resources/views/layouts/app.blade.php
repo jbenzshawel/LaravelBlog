@@ -48,6 +48,7 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
+                    @if (!Auth::guest())
                     <li><a href="{{ url('/dashboard') }}">Dashboard</a></li>
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -57,7 +58,8 @@
                             <li><a href="{{ url('/posts') }}">List</a></li>
                             <li><a href="{{ url('/posts/create')}}">New</a></li>
                         </ul>
-                </li>
+                    </li>
+                    @endif
                 </ul>
 
                 <!-- Right Side Of Navbar -->

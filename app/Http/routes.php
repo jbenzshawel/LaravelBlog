@@ -43,12 +43,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/posts/approveCommentPostback', 'PostsController@approveCommentPostback');
     Route::post('/posts/unapproveCommentPostback', 'PostsController@unapproveCommentPostback');
     Route::post('/posts/deleteCommentPostback', 'PostsController@deleteCommentPostback');
-    Route::post('/posts/createPostback/', [
-        'uses' => 'PostsController@createPostback', 'as' => 'createPostback'
-    ]);
-    Route::post('/posts/createCommentPostback/', [
-        'uses' => 'PostsController@createCommentPostback', 'as' => 'createCommentPostback'
-    ]);
+    Route::post('/posts/hidePostback', 'PostsController@hidePostback');
+    Route::post('/posts/showPostback', 'PostsController@showPostback');
+    Route::post('/posts/deletePostback', 'PostsController@deletePostback');
+    Route::post('/posts/createPostback/', 'PostsController@createPostback');
+    Route::post('/posts/createCommentPostback/', 'PostsController@createCommentPostback');
 
 
 });

@@ -94,6 +94,28 @@ class PostsController extends BaseController
         return $status;
     }
 
+    public function deletePostback(Request $request)
+    {
+        if($this->updatePost($request, 'DeletePost'))
+            return "true";
+        return "false";
+    }
+
+    public function hidePostback(Request $request)
+    {
+        if($this->updatePost($request, 'HidePost'))
+            return "true";
+        return "false";
+    }
+
+    public function showPostback(Request $request)
+    {
+        if($this->updatePost($request, 'ShowPost'))
+            return "true";
+        return "false";
+    }
+
+
     /**
      * Postback for ajax to save a comment
      *
@@ -182,6 +204,17 @@ class PostsController extends BaseController
            $status = call_user_func_array(array($class, $callbackAction), array($comment["commentId"]));
            if($status)
                return true;
+        }
+        return false;
+    }
+
+    private function updatePost(Request $request, $callbackAction) {
+        $class= 'App\Posts';
+        $post = $request->all();
+        if (isset($post["postId"]) && gettype($post["postId"]) == "integer") {
+            $status = call_user_func_array(array($class, $callbackAction), array($post["postId"]));
+            if($status)
+                return true;
         }
         return false;
     }

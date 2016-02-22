@@ -39,6 +39,20 @@ function ajaxPost(settings, async, csrfToken) {
     }
 }
 
+function alertMsg(type, action, msgId) {
+    if (type == undefined) return false;
+    var deleteMsg = '<div class="alert alert-success alert-dismissible" role="alert">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        '<strong>Success!</strong> ' + type + ' have been deleted.' +
+        '</div>';
+    var updateMsg = '<div class="alert alert-success alert-dismissible" role="alert">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        '<strong>Success!</strong> ' + type + ' status have been updated.' +
+        '</div>';
+    if (action == 'delete') $(msgId).html(deleteMsg);
+    if (action == 'update') $(msgId).html(updateMsg);
+}
+
 $(function() {
     $.fn.addError = function(errorMsg, field) {
         if (field == undefined) field = "";

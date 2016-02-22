@@ -25,6 +25,7 @@
                     </div>
                     <div class="posts-section">
                         <h2>Manage Posts</h2>
+                        <div id="resPostMsg"></div>
                         <table id="postsTable" class="display table">
                             <thead>
                             <tr>
@@ -53,10 +54,10 @@
                                 @foreach($PostsList as $post)
                                     <tr>
                                         <td>
-                                            <input type="checkbox" value="{{ $post["id"] }}" name="post">
+                                            <input type="checkbox" value="{{ $post["id"] }}" data-chbx-post-id="{{ $post["id"] }}" name="post">
                                         </td>
                                         <td class="center-text">
-                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                            {!! $post["visible"] ? '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' : '' !!}
                                         </td>
                                         <td>
                                             {{ $post["id"] }}
@@ -68,7 +69,7 @@
                                             {{ date('F d, Y h:i:s A', strtotime($post["dateCreated"])) }}
                                         </td>
                                         <td>
-                                            {{--date('F d, Y h:i:s A', strtotime($post["lastUpdated"])) --}}
+                                            {{ $post["lastUpdated"]  }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -76,14 +77,14 @@
                             </tbody>
                         </table>
                         <div class="form-group">
-                            <button class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm">Delete Selected</button>
-                            <button class="btn btn-warning" id="unapprovePosts">Hide Selected</button>
-                            <button class="btn btn-success" id="approvePosts">Show Selected</button>
+                            <button class="btn btn-danger" data-toggle="modal" id="deletePostModal">Delete Selected</button>
+                            <button class="btn btn-warning" id="hidePosts">Hide Selected</button>
+                            <button class="btn btn-success" id="showPosts">Show Selected</button>
                         </div>
                     </div>
                     <div class="comments-section">
                         <h2>Approve Comments</h2>
-                        <div id="resMsg"></div>
+                        <div id="resCmtMsg"></div>
                         <table id="commentsTable" class="display table">
                             <thead>
                                 <tr>
@@ -109,7 +110,7 @@
                                 @foreach($CommentList as $comment)
                                     <tr>
                                         <td>
-                                            <input type="checkbox" value="{{ $comment->ID }}" name="comment">
+                                            <input type="checkbox" value="{{ $comment->ID }}" data-chbx-cmt-id="{{ $comment->ID }}" name="comment">
                                         </td>
                                         <td class="center-text">
                                             {!! filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' :  '' !!}
@@ -129,7 +130,7 @@
                             </tbody>
                         </table>
                         <div class="form-group">
-                            <button class="btn btn-danger" data-toggle="modal" id="deleteCommenttModal">Delete Selected</button>
+                            <button class="btn btn-danger" data-toggle="modal" id="deleteCommentModal">Delete Selected</button>
                             <button class="btn btn-warning" id="unapproveComments">Hide Selected</button>
                             <button class="btn btn-success" id="approveComments">Approve Selected</button>
                         </div>
@@ -179,14 +180,6 @@
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         "use strict";
-        window.alertSuccess = '<div class="alert alert-success alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                '<strong>Success!</strong> Comment(s) status have been updated.' +
-                '</div>';
-        window.alertDelete = '<div class="alert alert-success alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                '<strong>Success!</strong> Comment(s) have been deleted.' +
-                '</div>';
         function sendCommentId(url, commentId, csrfToken) {
             if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
             var settings = new Object();
@@ -195,16 +188,39 @@
             settings.success = function(data) {
                 if(data == "true") {
                     if (url.indexOf("unapprove") > 0) {
-                        $("input[value='" + commentId + "']").parent().closest('td').next('td').html('');
-                        $("#resMsg").html(window.alertSuccess);
+                        $("input[data-chbx-cmt-id='" + commentId + "']").parent().closest('td').next('td').html('');
+                        alertMsg('Comment(s)', 'update', '#resCmtMsg');
                     } else if (url.indexOf("approve") > 0) {
-                        $("input[value='" + commentId + "']").parent().closest('td').next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
-                        $("#resMsg").html(window.alertSuccess);
+                        $("input[data-chbx-cmt-id='" + commentId + "']").parent().closest('td').next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+                        alertMsg('Comment(s)', 'update', '#resCmtMsg');
                     } else if (url.indexOf("delete") > 0) {
-                        $("input[value='" + commentId + "']").parent().parent().remove();
-                        $("#resMsg").html(window.alertDelete);
+                        $("input[data-chbx-cmt-id='" + commentId + "']").parent().parent().remove();
+                        alertMsg('Comment(s)', 'delete', '#resCmtMsg');
                     }
-                    $("input[type='checkbox']").prop("checked", false);
+                    $("input[name='comment']").prop("checked", false);
+                    return true;
+                }
+            };
+            ajaxPost(settings, false, csrfToken);
+        }
+        function sendPostId(url, postId, csrfToken) {
+            if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
+            var settings = new Object();
+            settings.url = url;
+            settings.data = JSON.stringify({ postId: parseInt(postId, 10) });
+            settings.success = function(data) {
+                if(data == "true") {
+                    if (url.indexOf("hide") > 0) {
+                        $("input[data-chbx-post-id='" + postId + "']").parent().closest('td').next('td').html('');
+                        alertMsg('Post(s)', 'update', '#resPostMsg');
+                    } else if (url.indexOf("show") > 0) {
+                        $("input[data-chbx-post-id='" + postId + "']").parent().closest('td').next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+                        alertMsg('Post(s)', 'update', '#resPostMsg');
+                    } else if (url.indexOf("delete") > 0) {
+                        $("input[data-chbx-post-id='" + postId + "']").parent().parent().remove();
+                        alertMsg('Post(s)', 'delete', '#resPostMsg');
+                    }
+                    $("input[name='post']").prop("checked", false);
                     return true;
                 }
             };
@@ -226,7 +242,28 @@
         }
         function deleteComment(commentId) {
             if(!isNaN(parseInt(commentId, 10))) {
-                sendCommentId("/projects/LaravelBlog/public/posts/deleteCommentPostback", commentId);
+                sendPostId("/projects/LaravelBlog/public/posts/deleteCommentPostback", commentId);
+                return true;
+            }
+            return false;
+        }
+        function showPost(postId) {
+            if(!isNaN(parseInt(postId, 10))) {
+                sendPostId("/projects/LaravelBlog/public/posts/showPostback", postId);
+                return true;
+            }
+            return false;
+        }
+        function hidePost(postId) {
+            if(!isNaN(parseInt(postId, 10))) {
+                sendPostId("/projects/LaravelBlog/public/posts/hidePostback", postId);
+                return true;
+            }
+            return false;
+        }
+        function deletePost(postId) {
+            if(!isNaN(parseInt(postId, 10))) {
+                sendPostId("/projects/LaravelBlog/public/posts/deletePostback", postId);
                 return true;
             }
             return false;
@@ -242,7 +279,7 @@
             });
             $("#approveComments").click(function(e) {
                 e.preventDefault();
-                $("input[type='checkbox']:checked").each(function() {
+                $("input[name='comment']:checked").each(function() {
                    if(this.value != "") {
                        approveComment(this.value);
                    }
@@ -250,7 +287,7 @@
             });
             $("#unapproveComments").click(function(e) {
                 e.preventDefault();
-                $("input[type='checkbox']:checked").each(function() {
+                $("input[name='comment']:checked").each(function() {
                     if(this.value != "") {
                         unapproveComment(this.value);
                     }
@@ -258,18 +295,50 @@
             });
             $("#yesDelete").click(function(e) {
                 e.preventDefault();
-                $("input[type='checkbox']:checked").each(function() {
-                    if(this.value != "") {
-                        deleteComment(this.value);
-                    }
-                });
+                if($(this).attr("data-delete-type") == "comments") {
+                    $("input[name='comment']:checked").each(function() {
+                        if (this.value != "") {
+                            deleteComment(this.value);
+                        }
+                    });
+                } else if($(this).attr("data-delete-type") == "posts") {
+                    $("input[name='post']:checked").each(function() {
+                        if (this.value != "") {
+                            deletePost(this.value);
+                        }
+                    });
+                }
                 $("#confirmDeleteModal").modal('hide');
-            })
-            $("#deleteCommenttModal").click(function(e) {
+            });
+            $("#deleteCommentModal").click(function(e) {
                 e.preventDefault();
                 if($("input[name='comment']:checked").size() > 0) {
+                    $("#yesDelete").attr("data-delete-type", "comments");
                     $("#confirmDeleteModal").modal('show');
                 }
+            });
+            $("#deletePostModal").click(function(e) {
+                e.preventDefault();
+                if($("input[name='post']:checked").size() > 0) {
+                    $("#yesDelete").attr("data-delete-type", "posts");
+                    $("#confirmDeleteModal").modal('show');
+                }
+            });
+            $("#hidePosts").click(function(e) {
+                e.preventDefault();
+                $("input[name='post']:checked").each(function() {
+                    if(this.value != "") {
+                        hidePost(this.value);
+                    }
+                })
+            });
+            $("#showPosts").click(function(e) {
+                e.preventDefault();
+                $("input[name='post']:checked").each(function() {
+                    if(this.value != "") {
+                        showPost(this.value);
+                    }
+                })
             });
         });
     </script>

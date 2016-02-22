@@ -29,6 +29,8 @@ class Posts extends Model
 
     public static $posts;
 
+    public static $datetime;
+
     public function __construct($title = "", $content = "", $id = "", $userID = "")
     {
         self::$posts = DB::table('posts');
@@ -46,13 +48,13 @@ class Posts extends Model
             // create post
             if(empty(self::$id)) {
                 self::$posts->insert([
-                    [ "title" => self::$title, "content" => self::$content, "UserID" => self::$userID ]
+                    [ "title" => self::$title, "content" => self::$content, "UserID" => self::$userID, "Visible" => true ]
 
                 ]);
                 $result = true;
             } else { // update post
                 self::$posts->where('id', self::$id)->update([
-                    [ "title" => self::$title, "content" => self::$content ]
+                    [ "title" => self::$title, "content" => self::$content, "Visible" => true ]
                 ]);
                 $result = true;
             }
@@ -61,14 +63,51 @@ class Posts extends Model
         return $result;
     }
 
+    public static function DeletePost($id = null) {
+        $result = false;
+        if(isset($id)) {
+            DB::table('posts')->where('id', $id)->delete();
+            $result = true;
+        } elseif(isset(self::$id)) {
+            DB::table('posts')->where('id', self::$id)->delete();
+            $result = true;
+        }
+        return $result;
+    }
+
+    public static function HidePost($id = null) {
+        if(isset($id)) {
+           DB::table('posts')->where('id', $id)->update([
+                "visible" => false, "updated_at" => date("Y-m-d H:i:s")
+           ]);
+            return true;
+        }
+        return false;
+    }
+
+    public static function ShowPost($id = null) {
+        if(isset($id)) {
+            DB::table('posts')->where('id', $id)->update([
+                "visible" => true
+            ]);
+            return true;
+        }
+        return false;
+    }
+
     public static function ListPosts()
     {
         $titleList = DB::table('posts')->lists('id', 'title');
         $contentList = DB::table('posts')->lists('content', 'id');
         $dateList = DB::table('posts')->lists('created_at', 'id');
         $updatedList = DB::table('posts')->lists('updated_at', 'id');
+        $visibleList = DB::table('posts')->lists('visible', 'id');
         $postArray = array();
         foreach($titleList as $title => $id) {
+            $datetime = new \DateTime();
+            $lastUpdated = new \DateTime($updatedList[$id]);
+            $dateDiff = $datetime->diff($lastUpdated)->format('%R%a days');
+            $dateDiff = $dateDiff[0] == "-" ? "" : $dateDiff;
             if(strlen($contentList[$id]) > 74) {
                 $taglineOffset = 75;
             } else {
@@ -80,7 +119,8 @@ class Posts extends Model
                 "content" => $contentList[$id],
                 "excerpt" => substr($contentList[$id], 0, strpos($contentList[$id], ".", $taglineOffset) + 1),
                 "dateCreated" => $dateList[$id],
-                "lastUpdated" => $updatedList[$id]
+                "lastUpdated" => $dateDiff,
+                'visible' => $visibleList[$id]
             ]);
 
         }
