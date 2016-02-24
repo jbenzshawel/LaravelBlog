@@ -101,7 +101,7 @@ class Comments extends Model
     }
     public static function SaveComment()
     {
-
+        date_default_timezone_set('America/Chicago');
         $date = date("Y-m-d H:i:s");
         $comment = [
             "PostID" => self::$PostId,

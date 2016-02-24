@@ -14,13 +14,15 @@
                         <h2>Your Account</h2>
                         <dl class="dl-horizontal">
                             <dt>Name:</dt>
-                            <dd>{{ $user->name }} <a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+                            <dd><span id="name">{{ $user->name }}</span> <a href="#" id="changeUsername"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
 
                             <dt>Email:</dt>
-                            <dd>{{ $user->email }} <a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+                            <dd>{{ $user->email }} <a href="#" id="changeEmail"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
 
+                            <dt>Password:</dt>
+                            <dd>•••••••• <a href="#" id="changePassword"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
                             <dt>Last updated:</dt>
-                            <dd>{{ $lastUpdated }} <a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+                            <dd>{{ $lastUpdated }}</dd>
                         </dl>
                     </div>
                     <div class="posts-section">
@@ -165,7 +167,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-body">
-                Are you sure you want to delete the selected comments?
+                Are you sure you want to delete the selected items?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="yesDelete">Yes</button>
@@ -174,6 +176,84 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" tabindex="-1" id="changeNameModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Change Name</h4>
+                </div>
+                <div class="modal-body">
+                   <form>
+                       <div class="form-group">
+                           <label for="username">New Name</label>
+                           <input type="text" id="username" placeholder="New Name" class="form-control"/>
+                       </div>
+                   </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div class="modal fade" tabindex="-1" id="changeEmailModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Change Email</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="email">New Email</label>
+                            <input type="text" id="email" placeholder="New Email" class="form-control"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div class="modal fade" tabindex="-1" id="changePasswordModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Change Password</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="oldPassword">Old Password</label>
+                            <input type="password" id="oldPassword" placeholder="Old Password" class="form-control"/>
+                        </div>
+                    </form>
+                    <form>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" placeholder="New Password" class="form-control"/>
+                        </div>
+                    </form>
+                    <form>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-control"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 
 @section('scripts')
@@ -242,7 +322,7 @@
         }
         function deleteComment(commentId) {
             if(!isNaN(parseInt(commentId, 10))) {
-                sendPostId("/projects/LaravelBlog/public/posts/deleteCommentPostback", commentId);
+                sendCommentId("/projects/LaravelBlog/public/posts/deleteCommentPostback", commentId);
                 return true;
             }
             return false;
@@ -267,6 +347,21 @@
                 return true;
             }
             return false;
+        }
+        function changeUsername(username) {
+            if(username.length > 0) {
+                var settings = new Object();
+                settings.url = "/projects/LaravelBlog/public/user/changeName";
+                settings.data = JSON.stringify({ name : username });
+                settings.success = function(data) {
+                    if (data == "true") {
+                        $("#name").html(username);
+                        $("#changeNameModal").modal('hide');
+                        return true;
+                    }
+                }
+                ajaxPost(settings, true, $("#csrf_token").val());
+            }
         }
 
         $(function() {
@@ -339,6 +434,18 @@
                         showPost(this.value);
                     }
                 })
+            });
+            $("#changeUsername").click(function(e) {
+                e.preventDefault();
+                $("#changeNameModal").modal('show');
+            });
+            $("#changeEmail").click(function(e) {
+                e.preventDefault();
+                $("#changeEmailModal").modal('show');
+            });
+            $("#changePassword").click(function(e) {
+                e.preventDefault();
+                $("#changePasswordModal").modal('show');
             });
         });
     </script>

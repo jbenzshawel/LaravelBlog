@@ -23,4 +23,28 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static $id;
+
+    public static $name;
+
+    public static $email;
+
+    public function __construct()
+    {
+        self::$id = 1;//Auth::user()->id;
+        //self::$name = Auth::user()->name;
+        //self::$email = Auth::user()->email;
+    }
+
+    public static function changeName($name)
+    {
+        if(isset($name) && self::$id > 0) {
+            DB::table('users')->where('id', self::$id)->update([
+               "name" => $name
+            ]);
+            return true;
+        }
+        return false;
+    }
 }

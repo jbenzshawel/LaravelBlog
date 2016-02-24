@@ -77,7 +77,8 @@ class Posts extends Model
 
     public static function HidePost($id = null) {
         if(isset($id)) {
-           DB::table('posts')->where('id', $id)->update([
+            date_default_timezone_set('America/Chicago');
+            DB::table('posts')->where('id', $id)->update([
                 "visible" => false, "updated_at" => date("Y-m-d H:i:s")
            ]);
             return true;
@@ -87,8 +88,9 @@ class Posts extends Model
 
     public static function ShowPost($id = null) {
         if(isset($id)) {
+            date_default_timezone_set('America/Chicago');
             DB::table('posts')->where('id', $id)->update([
-                "visible" => true
+                "visible" => true, "updated_at" => date("Y-m-d H:i:s")
             ]);
             return true;
         }
