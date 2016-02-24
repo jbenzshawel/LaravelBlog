@@ -36,4 +36,21 @@ class HomeController extends Controller
         $viewData["PostsList"] = Posts::ListPosts();
         return view('home', $viewData);
     }
+
+    /**
+     * Postback for changing a user's name
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function changeNamePostback(Request $request)
+    {
+        $status = "false";
+        $user = $request->all();
+        if (isset($user["name"])) {
+            User::changeName($user["name"], $request->user()->id);
+            $status = "true";
+        }
+        return $status;
+    }
 }

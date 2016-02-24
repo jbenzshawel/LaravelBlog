@@ -8,9 +8,8 @@ function validateEmail(email) {
     return regex.test(email);
 }
 
-function clearErrors(clearText, formId) {
-    if (clearText == undefined) clearText = false;
-    if (clearText) {
+function clearErrors(formId) {
+    if (formId != undefined) {
         var form = document.getElementById(formId);
         form.reset();
     }

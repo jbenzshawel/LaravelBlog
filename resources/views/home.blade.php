@@ -184,7 +184,7 @@
                     <h4 class="modal-title">Change Name</h4>
                 </div>
                 <div class="modal-body">
-                   <form>
+                   <form id="nameForm">
                        <div class="form-group">
                            <label for="username">New Name</label>
                            <input type="text" id="username" placeholder="New Name" class="form-control"/>
@@ -192,7 +192,7 @@
                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-success" id="submitName">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
@@ -260,6 +260,65 @@
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         "use strict";
+        function approveComment(commentId) {
+            if(!isNaN(parseInt(commentId, 10))) {
+                sendCommentId("/projects/LaravelBlog/public/posts/approveCommentPostback", commentId);
+                return true;
+            }
+            return false;
+        }
+        function unapproveComment(commentId) {
+            if(!isNaN(parseInt(commentId, 10))) {
+                sendCommentId("/projects/LaravelBlog/public/posts/unapproveCommentPostback", commentId);
+                return true;
+            }
+            return false;
+        }
+        function deleteComment(commentId) {
+            if(!isNaN(parseInt(commentId, 10))) {
+                sendCommentId("/projects/LaravelBlog/public/posts/deleteCommentPostback", commentId);
+                return true;
+            }
+            return false;
+        }
+        function showPost(postId) {
+            if(!isNaN(parseInt(postId, 10))) {
+                sendPostId("/projects/LaravelBlog/public/posts/showPostback", postId);
+                return true;
+            }
+            return false;
+        }
+        function hidePost(postId) {
+            if(!isNaN(parseInt(postId, 10))) {
+                sendPostId("/projects/LaravelBlog/public/posts/hidePostback", postId);
+                return true;
+            }
+            return false;
+        }
+        function deletePost(postId) {
+            if(!isNaN(parseInt(postId, 10))) {
+                sendPostId("/projects/LaravelBlog/public/posts/deletePostback", postId);
+                return true;
+            }
+            return false;
+        }
+        function changeUsername(username) {
+            clearErrors();
+            if(username.length > 0) {
+                var settings = new Object();
+                settings.url = "/projects/LaravelBlog/public/user/changeName";
+                settings.data = JSON.stringify({ name : username });
+                settings.success = function(data) {
+                    if (data == "true") {
+                        $("#name").html(username);
+                        clearErrors("nameForm");
+                        $("#changeNameModal").modal('hide');
+                        return true;
+                    }
+                }
+                ajaxPost(settings, true, $("#csrf_token").val());
+            }
+        }
         function sendCommentId(url, commentId, csrfToken) {
             if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
             var settings = new Object();
@@ -306,64 +365,7 @@
             };
             ajaxPost(settings, false, csrfToken);
         }
-        function approveComment(commentId) {
-            if(!isNaN(parseInt(commentId, 10))) {
-                sendCommentId("/projects/LaravelBlog/public/posts/approveCommentPostback", commentId);
-                return true;
-            }
-            return false;
-        }
-        function unapproveComment(commentId) {
-            if(!isNaN(parseInt(commentId, 10))) {
-                sendCommentId("/projects/LaravelBlog/public/posts/unapproveCommentPostback", commentId);
-                return true;
-            }
-            return false;
-        }
-        function deleteComment(commentId) {
-            if(!isNaN(parseInt(commentId, 10))) {
-                sendCommentId("/projects/LaravelBlog/public/posts/deleteCommentPostback", commentId);
-                return true;
-            }
-            return false;
-        }
-        function showPost(postId) {
-            if(!isNaN(parseInt(postId, 10))) {
-                sendPostId("/projects/LaravelBlog/public/posts/showPostback", postId);
-                return true;
-            }
-            return false;
-        }
-        function hidePost(postId) {
-            if(!isNaN(parseInt(postId, 10))) {
-                sendPostId("/projects/LaravelBlog/public/posts/hidePostback", postId);
-                return true;
-            }
-            return false;
-        }
-        function deletePost(postId) {
-            if(!isNaN(parseInt(postId, 10))) {
-                sendPostId("/projects/LaravelBlog/public/posts/deletePostback", postId);
-                return true;
-            }
-            return false;
-        }
-        function changeUsername(username) {
-            if(username.length > 0) {
-                var settings = new Object();
-                settings.url = "/projects/LaravelBlog/public/user/changeName";
-                settings.data = JSON.stringify({ name : username });
-                settings.success = function(data) {
-                    if (data == "true") {
-                        $("#name").html(username);
-                        $("#changeNameModal").modal('hide');
-                        return true;
-                    }
-                }
-                ajaxPost(settings, true, $("#csrf_token").val());
-            }
-        }
-
+        
         $(function() {
             $('#commentsTable').DataTable();
             $('#postsTable').DataTable();
@@ -447,6 +449,18 @@
                 e.preventDefault();
                 $("#changePasswordModal").modal('show');
             });
+            $("#submitName").click(function(e) {
+                e.preventDefault();
+                if($("#username").val() != "" && $("#username").val().length > 3) {
+                    changeUsername($("#username").val());
+                } else {
+                    $("#username").addError("The name field must be at least 3 characters long", "username");
+                }
+            });
+            $("#changeNameModal").on('hidden.bs.modal', function () {
+                var id = $(this).find('form').attr('id');
+                clearErrors(id);
+            })
         });
     </script>
 @endsection

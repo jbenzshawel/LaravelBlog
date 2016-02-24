@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use DB;
 
 class User extends Authenticatable
 {
@@ -32,15 +33,13 @@ class User extends Authenticatable
 
     public function __construct()
     {
-        self::$id = 1;//Auth::user()->id;
-        //self::$name = Auth::user()->name;
-        //self::$email = Auth::user()->email;
+
     }
 
-    public static function changeName($name)
+    public static function changeName($name, $id)
     {
-        if(isset($name) && self::$id > 0) {
-            DB::table('users')->where('id', self::$id)->update([
+        if(isset($name) && $id > 0) {
+            DB::table('users')->where('id', $id)->update([
                "name" => $name
             ]);
             return true;

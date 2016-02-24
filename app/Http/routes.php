@@ -40,6 +40,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/posts', 'PostsController@index');
     Route::get('/posts/create', 'PostsController@create');
 
+    Route::post('/user/changeName', 'HomeController@changeNamePostback');
     Route::post('/posts/approveCommentPostback', 'PostsController@approveCommentPostback');
     Route::post('/posts/unapproveCommentPostback', 'PostsController@unapproveCommentPostback');
     Route::post('/posts/deleteCommentPostback', 'PostsController@deleteCommentPostback');

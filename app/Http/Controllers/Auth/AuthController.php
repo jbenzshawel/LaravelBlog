@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
@@ -38,13 +37,9 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('guest', ['except' => 'logout', 'checkSession']);
     }
 
-    public function changeNamePostback(Request $request)
-    {
-        $user = $request->all();
-    }
 
     /**
      * Get a validator for an incoming registration request.
