@@ -32,23 +32,21 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
-
+    // get routes
     Route::get('/dashboard', 'HomeController@index');
-
     Route::get('/post/{id}', 'PostsController@getPost');
-
     Route::get('/posts', 'PostsController@index');
     Route::get('/posts/create', 'PostsController@create');
-
+    // post routes
     Route::post('/user/changeName', 'HomeController@changeNamePostback');
-    Route::post('/posts/approveCommentPostback', 'PostsController@approveCommentPostback');
-    Route::post('/posts/unapproveCommentPostback', 'PostsController@unapproveCommentPostback');
-    Route::post('/posts/deleteCommentPostback', 'PostsController@deleteCommentPostback');
-    Route::post('/posts/hidePostback', 'PostsController@hidePostback');
-    Route::post('/posts/showPostback', 'PostsController@showPostback');
-    Route::post('/posts/deletePostback', 'PostsController@deletePostback');
-    Route::post('/posts/createPostback/', 'PostsController@createPostback');
-    Route::post('/posts/createCommentPostback/', 'PostsController@createCommentPostback');
-
-
+    Route::post('/user/changeEmail', 'HomeController@changeEmailPostback');
+    Route::post('/user/changePassword', 'HomeController@changePasswordPostback');
+    Route::post('/posts/approveComment', 'PostsController@approveCommentPostback');
+    Route::post('/posts/unapproveComment', 'PostsController@unapproveCommentPostback');
+    Route::post('/posts/deleteComment', 'PostsController@deleteCommentPostback');
+    Route::post('/posts/hide', 'PostsController@hidePostback');
+    Route::post('/posts/show', 'PostsController@showPostback');
+    Route::post('/posts/delete', 'PostsController@deletePostback');
+    Route::post('/posts/create', 'PostsController@createPostback');
+    Route::post('/posts/createComment', 'PostsController@createCommentPostback');
 });

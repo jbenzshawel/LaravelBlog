@@ -8,13 +8,28 @@ function validateEmail(email) {
     return regex.test(email);
 }
 
+function validatePasswordLength(password, id) {
+    if(password.trim() == "" && password.trim().length < 5) {
+        $(id).addError("Password must be at least 5 characters long");
+        return false;
+    }
+    return true;
+}
+
 function clearErrors(formId) {
+    $(".input-error").removeClass("input-error");
+    $(".error-message").remove();
     if (formId != undefined) {
         var form = document.getElementById(formId);
         form.reset();
     }
-    $(".input-error").removeClass("input-error");
-    $(".error-message").remove();
+}
+
+function clearModalErrors(modal) {
+    $(modal).on('hidden.bs.modal', function () {
+        var id = $(this).find('form').attr('id');
+        clearErrors(id);
+    });
 }
 
 function updateInputField(field) {
@@ -57,5 +72,5 @@ $(function() {
         if (field == undefined) field = "";
         $(this).after("<div class=\"" + field + " error-message text-danger\">" + errorMsg + "</div>");
         $(this).addClass("input-error");
-    }
+    };
 });

@@ -105,7 +105,7 @@
                 ParentId : parentId
             };
             var settings = new Object();
-            settings.url = "/projects/LaravelBlog/public/posts/createCommentPostback";
+            settings.url = "/projects/LaravelBlog/public/posts/createComment";
             settings.data = JSON.stringify(model);
             settings.success = function(data) {
                 if(data == "true") {

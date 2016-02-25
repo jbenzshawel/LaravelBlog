@@ -46,4 +46,26 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public static function changeEmail($email, $id)
+    {
+        if(isset($email) && $id > 0) {
+            DB::table('users')->where('id', $id)->update([
+                "email" => $email
+            ]);
+            return true;
+        }
+        return false;
+    }
+
+    public static function changePassword($passwordHash, $id)
+    {
+        if(strlen($passwordHash) == 60 && $id > 0) {
+            DB::table('users')->where('id', $id)->update([
+              "password" => $passwordHash
+            ]);
+            return true;
+        }
+        return false;
+    }
 }

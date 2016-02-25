@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use Hash;
 use App\User;
 use App\Posts;
 use App\Comments;
 use App\Http\Requests;
-use Auth;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -47,8 +48,41 @@ class HomeController extends Controller
     {
         $status = "false";
         $user = $request->all();
-        if (isset($user["name"])) {
+        if (isset($user["name"]) && strlen($user["name"]) > 2) {
             User::changeName($user["name"], $request->user()->id);
+            $status = "true";
+        }
+        return $status;
+    }
+
+    /**
+     * Postback for changing a user's email
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function changeEmailPostback(Request $request)
+    {
+        $status = "false";
+        $user = $request->all();
+        if (isset($user["email"]) && filter_var($user["email"], FILTER_VALIDATE_EMAIL)) {
+            User::changeEmail($user["email"], $request->user()->id);
+            $status = "true";
+        }
+        return $status;
+    }
+
+    /**
+     * Postback for changing a user's password
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function changePasswordPostback(Request $request) {
+        $status = "false";
+        $user = $request->all();
+        if(Auth::attempt(['email' => $user["email"], 'password' => $user["oldPassword"]])) {
+            User::changePassword(Hash::make($user["newPassword"]), $request->user()->id);
             $status = "true";
         }
         return $status;
