@@ -184,18 +184,19 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Change Name</h4>
                 </div>
-                <div class="modal-body">
-                   <form id="nameForm">
-                       <div class="form-group">
-                           <label for="username">New Name</label>
-                           <input type="text" id="username" placeholder="New Name" class="form-control"/>
-                       </div>
-                   </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="submitName">Submit</button>
-                    <button class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                <form id="nameForm">
+                    <div class="modal-body">
+                           <div class="form-group">
+                               <label for="username">New Name</label>
+                               <input type="text" id="username" placeholder="New Name" class="form-control"/>
+                           </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success" />
+                        <button class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -206,18 +207,18 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Change Email</h4>
                 </div>
-                <div class="modal-body">
-                    <form id="emailForm">
-                        <div class="form-group">
-                            <label for="email">New Email</label>
-                            <input type="text" id="email" placeholder="New Email" class="form-control"/>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="submitEmail">Submit</button>
-                    <button class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                <form id="emailForm">
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="email">New Email</label>
+                                <input type="text" id="email" placeholder="New Email" class="form-control"/>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success" />
+                        <button class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -228,29 +229,26 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Change Password</h4>
                 </div>
-                <div class="modal-body">
-                    <form id="passwordForm">
-                        <div class="form-group">
-                            <label for="oldPassword">Old Password</label>
-                            <input type="password" id="oldPassword" placeholder="Old Password" class="form-control"/>
+                <form id="passwordForm">
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="oldPassword">Old Password</label>
+                                <input type="password" id="oldPassword" placeholder="Old Password" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" placeholder="New Password" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-success" />
+                            <button class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </form>
-                    <form>
-                        <div class="form-group">
-                            <label for="newPassword">New Password</label>
-                            <input type="password" id="newPassword" placeholder="New Password" class="form-control"/>
-                        </div>
-                    </form>
-                    <form>
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-control"/>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="submitPassword">Submit</button>
-                    <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

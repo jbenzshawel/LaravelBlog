@@ -103,10 +103,10 @@ function sendCommentId(url, commentId, csrfToken) {
     settings.success = function(data) {
         if(data == "true") {
             if (url.indexOf("unapprove") > 0) {
-                $("input[data-chbx-cmt-id='" + commentId + "']").parent().closest('td').next('td').html('');
+                $("input[data-chbx-cmt-id='" + commentId + "']").next('td').html('');
                 alertMsg('Comment(s)', 'update', '#resCmtMsg');
             } else if (url.indexOf("approve") > 0) {
-                $("input[data-chbx-cmt-id='" + commentId + "']").parent().closest('td').next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+                $("input[data-chbx-cmt-id='" + commentId + "']").next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
                 alertMsg('Comment(s)', 'update', '#resCmtMsg');
             } else if (url.indexOf("delete") > 0) {
                 $("input[data-chbx-cmt-id='" + commentId + "']").parent().parent().remove();
@@ -259,10 +259,12 @@ $(function() {
             changePassword($("#oldPassword").val(), $("#newPassword").val());
         }
     });
+    // set modals to clear form errors on close
     var modals = ["#changePasswordModal", "#changeNameModal", "#changeEmailModal"];
     for(var i = 0, modal; modal = modals[i++];) {
         clearModalErrors(modal);
     }
+    // add input field listener to clear error messages on change
     var inputs = ["#email", "#username", "#oldPassword", "#newPassword", "#confirmPassword"];
     for(var j = 0, input; input = inputs[j++];) {
         updateInputField(input);
