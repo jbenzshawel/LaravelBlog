@@ -70,6 +70,7 @@ function alertMsg(type, action, msgId) {
 $(function() {
     $.fn.addError = function(errorMsg, field) {
         if (field == undefined) field = "";
+        $(this).find('.error-message').remove();
         $(this).after("<div class=\"" + field + " error-message text-danger\">" + errorMsg + "</div>");
         $(this).addClass("input-error");
     };

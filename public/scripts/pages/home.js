@@ -80,16 +80,15 @@ function changeEmail(email) {
 }
 
 function changePassword(oldPassword, newPassword) {
-    clearErrors();
     if (oldPassword.length > 0 && newPassword.length > 0) {
         var settings = new Object();
         settings.url = "/projects/LaravelBlog/public/user/changePassword";
         settings.data = JSON.stringify({ oldPassword : oldPassword, newPassword : newPassword });
         settings.success = function(data) {
             if(data == "true") {
-                $("#changeEmailModal").modal('hide');
+                $("#changePasswordModal").modal('hide');
             } else {
-                $("#password").addError("Old password is not correct");
+                $("#oldPassword").addError("Old password is not correct");
             }
             return true;
         };
@@ -226,7 +225,7 @@ $(function() {
         e.preventDefault();
         $("#changePasswordModal").modal('show');
     });
-    $("#submitName").click(function(e) {
+    $("#nameForm").submit(function(e) {
         e.preventDefault();
         if ($("#username").val() != "" && $("#username").val().length > 3) {
             changeUsername($("#username").val());
@@ -234,7 +233,7 @@ $(function() {
             $("#username").addError("The name field must be at least 3 characters long", "username");
         }
     });
-    $("#submitEmail").click(function(e) {
+    $("#emailForm").submit(function(e) {
         e.preventDefault();
         if ($("#email").val() != "" && validateEmail($("#email").val())) {
             changeEmail($("#email").val());
@@ -242,14 +241,14 @@ $(function() {
             $("#email").addError("The email must be of the format address@example.com", "email");
         }
     });
-    $("#submitPassword").click(function(e) {
+    $("#passwordForm").submit(function(e) {
         e.preventDefault();
         clearErrors();
         var isValid = true;
-        if (validatePasswordLength($("#oldPassword").val(), "#oldPassword")) {
+        if (validatePasswordLength($("#oldPassword").val(), "#oldPassword") == false) {
             isValid = false;
         }
-        if (validatePasswordLength($("#newPassword").val(), "#newPassword")) {
+        if (validatePasswordLength($("#newPassword").val(), "#newPassword") == false) {
             isValid = false;
         }
         if ($("#newPassword").val() != $("#confirmPassword").val()) {

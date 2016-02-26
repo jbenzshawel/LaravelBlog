@@ -81,7 +81,7 @@ class HomeController extends Controller
     public function changePasswordPostback(Request $request) {
         $status = "false";
         $user = $request->all();
-        if(Auth::attempt(['email' => $user["email"], 'password' => $user["oldPassword"]])) {
+        if(Auth::attempt(['email' => $request->user()->email, 'password' => $user["oldPassword"]])) {
             User::changePassword(Hash::make($user["newPassword"]), $request->user()->id);
             $status = "true";
         }

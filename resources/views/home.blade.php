@@ -194,7 +194,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="submitName">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -207,7 +207,7 @@
                     <h4 class="modal-title">Change Email</h4>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="emailForm">
                         <div class="form-group">
                             <label for="email">New Email</label>
                             <input type="text" id="email" placeholder="New Email" class="form-control"/>
@@ -216,7 +216,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="submitEmail">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -229,7 +229,7 @@
                     <h4 class="modal-title">Change Password</h4>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="passwordForm">
                         <div class="form-group">
                             <label for="oldPassword">Old Password</label>
                             <input type="password" id="oldPassword" placeholder="Old Password" class="form-control"/>
@@ -250,7 +250,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="submitPassword">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
