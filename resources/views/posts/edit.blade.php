@@ -13,10 +13,10 @@
                         <input type="hidden" name="csrf-token" value="{{ csrf_token() }}" id="crsf_token"/>
                      	<div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" placeholder="Post Title"/>
+                            <input type="text" class="form-control" id="title" placeholder="Post Title" value="{{ $post->title }}"/>
                         </div>
 
-                            <div id="content"></div>
+                            <div id="content">{!! $post->content !!}</div>
 
                         <div class="form-group center-button">
                             <button type="submit" class="btn btn-default" id="submitPost">Submit</button>
@@ -33,6 +33,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.5.1/summernote.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     'use strict';
+    var post = {!! json_encode($post) !!};
     function createPost() {
         clearErrors();
         var $title = $("#title");
@@ -71,9 +72,7 @@
             e.preventDefault();
             createPost();
         });
-        var post = {!! json_encode(["title" => $post->title, "content" => $post->content]) !!}
-        $("#title").val(post.title);
-        $("#content").summernote({"code":  post.content, height:300});
+        $("#content").summernote({height:300});
     }) ;
 
 </script>
