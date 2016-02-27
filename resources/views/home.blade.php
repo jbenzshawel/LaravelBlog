@@ -66,7 +66,7 @@
                                             {{ $post["id"] }}
                                         </td>
                                         <td>
-                                            <a href="#" class="showComment" data-commentId="{{ $post["id"] }}">{{ $post["title"] }}</a>
+                                            <a href="/projects/LaravelBlog/public/post/{{ $post["id"] }}/edit">{{ $post["title"] }}</a>
                                         </td>
                                         <td>
                                             {{ date('F d, Y h:i:s A', strtotime($post["dateCreated"])) }}

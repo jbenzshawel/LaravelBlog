@@ -34,7 +34,7 @@
 <script type="text/javascript">
     'use strict';
     var post = {!! json_encode($post) !!};
-    function createPost() {
+    function updatePost() {
         clearErrors();
         var $title = $("#title");
         var content = $("#content").code();
@@ -49,7 +49,7 @@
         }
         if(isValid) {
             var model = {
-                userID : parseInt(userID, 10),
+                id: post.id,
                 title : $title.val(),
                 content : content
             };
@@ -60,7 +60,7 @@
                 if(data == "true") {
                     $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
                                               "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
-                                              "Your post has been created!</div>");
+                                              "Your post has been updated!</div>");
                 }
             };
             ajaxPost(settings, true, $("#crsf_token").val());
@@ -70,7 +70,7 @@
     $(function() {
         $("#submitPost").click(function(e) {
             e.preventDefault();
-            createPost();
+            updatePost();
         });
         $("#content").summernote({height:300});
     }) ;

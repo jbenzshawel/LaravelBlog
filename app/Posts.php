@@ -54,7 +54,7 @@ class Posts extends Model
                 $result = true;
             } else { // update post
                 self::$posts->where('id', self::$id)->update([
-                    [ "title" => self::$title, "content" => self::$content, "Visible" => true ]
+                     "title" => self::$title, "content" => self::$content, "Visible" => true
                 ]);
                 $result = true;
             }

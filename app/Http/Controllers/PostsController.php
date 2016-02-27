@@ -98,6 +98,7 @@ class PostsController extends BaseController
     {
         $status = "false";
         $post = $request->all();
+        if(!isset($post["userID"])) $post["userID"] = $request->user()->id;
         if (isset($post["title"]) && isset($post["content"]) && isset($post["userID"])) {
             if (isset($post["id"])) {
                 $Posts = new Posts($post["title"], $post["content"], $post["id"], $post["userID"]);
