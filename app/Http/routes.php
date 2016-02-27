@@ -37,6 +37,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/post/{id}', 'PostsController@getPost');
     Route::get('/posts', 'PostsController@index');
     Route::get('/posts/create', 'PostsController@create');
+    Route::get('/post/{id}/edit', 'PostsController@editPost');
     // post routes
     Route::post('/user/changeName', 'HomeController@changeNamePostback');
     Route::post('/user/changeEmail', 'HomeController@changeEmailPostback');

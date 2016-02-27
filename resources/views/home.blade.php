@@ -167,6 +167,9 @@
     <div class="modal fade bs-example-modal-sm" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm Delete</h4>
+                </div>
                 <div class="modal-body">
                 Are you sure you want to delete the selected items?
                 </div>
@@ -192,7 +195,7 @@
                            </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-success" />
+                        <input type="submit" class="btn btn-success" value="Save" />
                         <button class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -215,7 +218,7 @@
                             </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-success" />
+                        <input type="submit" class="btn btn-success" value="Save"/>
                         <button class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -245,7 +248,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <input type="submit" class="btn btn-success" />
+                            <input type="submit" class="btn btn-success" value="Save"/>
                             <button class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </form>

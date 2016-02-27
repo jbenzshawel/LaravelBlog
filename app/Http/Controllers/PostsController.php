@@ -56,6 +56,24 @@ class PostsController extends BaseController
     }
 
     /**
+     * Get posts by id to edit
+     *
+     * @param int post id
+     * @return \Illuminate\Http\Response
+     */
+    // GET: /posts/{id}/edit
+    public function editPost($id)
+    {
+        $viewData = array();
+        if(isset($id)) {
+            $viewData["post"] = Posts::GetById($id);
+            $viewData["CommentsList"] = Comments::GetCommentsByPostId($id);
+        }
+
+        return view('posts/edit', $viewData);
+    }
+
+    /**
      * Show create post page
      *
      * @return \Illuminate\Http\Response
@@ -72,10 +90,10 @@ class PostsController extends BaseController
     /**
      * Postback for ajax to save a post
      *
-     * @param \Illuminate\Http\Request
+     * @param \Illuminate\Http\Request content and userID variables
      * @return string response
      */
-    // POST: /posts/createPostback
+    // POST: /posts/create
     public function createPostback(Request $request)
     {
         $status = "false";
@@ -94,6 +112,13 @@ class PostsController extends BaseController
         return $status;
     }
 
+    /**
+     * Postback for ajax to delete a post
+     *
+     * @param Request $request postID variable
+     * @return string
+     */
+    // POST: /posts/delete
     public function deletePostback(Request $request)
     {
         if($this->updatePost($request, 'DeletePost'))
@@ -101,6 +126,13 @@ class PostsController extends BaseController
         return "false";
     }
 
+    /**
+     * Postback for ajax to hide a post
+     *
+     * @param Request $request postID variable
+     * @return string
+     */
+    // POST: /posts/hide
     public function hidePostback(Request $request)
     {
         if($this->updatePost($request, 'HidePost'))
@@ -108,6 +140,13 @@ class PostsController extends BaseController
         return "false";
     }
 
+    /**
+     * Postback for ajax to show a post
+     *
+     * @param Request $request postID variable
+     * @return string
+     */
+    // POST: /posts/show
     public function showPostback(Request $request)
     {
         if($this->updatePost($request, 'ShowPost'))
@@ -122,7 +161,7 @@ class PostsController extends BaseController
      * @param \Illuminate\Http\Request
      * @return string response
      */
-    // POST: /posts/createCommentPostback
+    // POST: /posts/createComment
     public function createCommentPostback(Request $request)
     {
         $status = "false";
@@ -157,6 +196,7 @@ class PostsController extends BaseController
      * @param Request $request
      * @return string true or false of action (laravel requires response to be string)
      */
+    // POST: /posts/approveComment
     public function approveCommentPostback(Request $request)
     {
         if($this->updateComment($request, "ApproveComment"))
@@ -170,6 +210,7 @@ class PostsController extends BaseController
      * @param Request $request
      * @return string true or false of action (laravel requires response to be string)
      */
+    // POST: /posts/unapproveComment
     public function unapproveCommentPostback(Request $request)
     {
         if($this->updateComment($request, "UnApproveComment"))
@@ -183,6 +224,7 @@ class PostsController extends BaseController
      * @param Request $request
      * @return string true or false of action (laravel requires response to be string)
      */
+    // POST: /posts/deleteComment
     public function deleteCommentPostback(Request $request)
     {
         if($this->updateComment($request, "DeleteComment"))
@@ -197,6 +239,7 @@ class PostsController extends BaseController
      * @param $callbackAction is the string name of the static function in the Comments object
      * @return bool response of callback function
      */
+    // POST: /posts/updateComment
     private function updateComment(Request $request, $callbackAction) {
         $class = 'App\Comments';
         $comment = $request->all();
@@ -208,6 +251,14 @@ class PostsController extends BaseController
         return false;
     }
 
+    /**
+     * Private function for updating posts.
+     *
+     * @param Request $request
+     * @param $callbackAction is the string name of the static function in the Posts object
+     * @return bool response of callback function
+     */
+    // POST: /posts/updatePost
     private function updatePost(Request $request, $callbackAction) {
         $class= 'App\Posts';
         $post = $request->all();
