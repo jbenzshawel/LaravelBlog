@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Posts extends Model
 {
     //
-    protected $table = "posts"; 
+    protected $table = "posts";
 
     /**
      * The attributes that are mass assignable.
@@ -33,7 +33,6 @@ class Posts extends Model
 
     public function __construct($title = "", $content = "", $id = "", $userID = "")
     {
-        self::$posts = DB::table('posts');
         self::$id = $id;
         self::$title = $title;
         self::$content = $content;
@@ -47,14 +46,14 @@ class Posts extends Model
         if(isset(self::$title) && isset(self::$content)) {
             // create post
             if(empty(self::$id)) {
-                self::$posts->insert([
+                Posts::insert([
                     [ "title" => self::$title, "content" => self::$content, "UserID" => self::$userID, "Visible" => true ]
 
                 ]);
                 $result = true;
             } else { // update post
                 self::$posts->where('id', self::$id)->update([
-                     "title" => self::$title, "content" => self::$content, "Visible" => true
+                    "title" => self::$title, "content" => self::$content, "Visible" => true
                 ]);
                 $result = true;
             }
@@ -77,10 +76,9 @@ class Posts extends Model
 
     public static function HidePost($id = null) {
         if(isset($id)) {
-            date_default_timezone_set('America/Chicago');
             DB::table('posts')->where('id', $id)->update([
                 "visible" => false, "updated_at" => date("Y-m-d H:i:s")
-           ]);
+            ]);
             return true;
         }
         return false;
@@ -132,8 +130,8 @@ class Posts extends Model
     public static function GetById($id) {
         $post = DB::table('posts')->where("id", $id)->first();
         if(isset(self::$id)) {
-          $Posts = new Posts($post->title, $post->content, $post->id, $post->userID);
-          $post = $Posts;
+            $Posts = new Posts($post->title, $post->content, $post->id, $post->userID);
+            $post = $Posts;
         }
         return $post;
     }
