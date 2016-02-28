@@ -6,7 +6,7 @@ use Auth;
 use App\Posts;
 use App\Comments;
 use App\Http\Requests;
-use App\Repositories\PostsRepository as PostsRepo;
+use App\Repositories\PostsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -15,17 +15,17 @@ class PostsController extends BaseController
     /**
      * @var Posts
      */
-    private $PostsRepo;
+    private $_repository;
 
 	/**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(PostsRepo $Repository)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->PostsRepo = $Repository;
+        $this->_repository = new PostsRepository();
     }
 
     /**
@@ -39,7 +39,8 @@ class PostsController extends BaseController
         $viewData = array(); 
         $viewData["user"] = Auth::user(); 
         $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
-        $viewData["PostList"] = $this->PostsRepo->All();
+
+        $viewData["PostList"] = $this->_repository->All();
 
         return view('posts', $viewData);
     }

@@ -20,7 +20,7 @@ class CommentsRepository extends Repository
      */
     function model()
     {
-        return 'App\Models\Comments';
+        return 'App\Comments';
     }
 
     /**

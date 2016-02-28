@@ -8,10 +8,12 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Posts;
+
 use App\Repositories\Interfaces\IRepository;
 //use App\Repositories\Exceptions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Container\Container as App;
+//use Illuminate\Container\Container as App;
 
 abstract class Repository implements IRepository
 {
@@ -29,10 +31,10 @@ abstract class Repository implements IRepository
      * @param App $app
      *
      */
-    public function __construct(App $app)
+    public function __construct()
     {
-        $this->app = $app;
-        $this->makeModel();
+        $modelClass = $this->model();
+        $this->model = new $modelClass();
     }
 
     /**
@@ -47,9 +49,10 @@ abstract class Repository implements IRepository
      * @param array $columns
      * @return mixed
      */
-    public function All($columns = array('*'))
+    public function All()
     {
-        return $this->model->get($columns);
+
+        return $this->model->get();
     }
 
     /**
@@ -112,17 +115,4 @@ abstract class Repository implements IRepository
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder
-     * @throws RepositoryException
-     */
-    public function makeModel()
-    {
-        $model = $this->app->make($this->model());
-
-        if (!$model instanceof Model)
-           // throw new RepositoryException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
-
-        return $this->model = $model->newQuery();
-    }
 }

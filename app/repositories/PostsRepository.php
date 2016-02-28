@@ -13,10 +13,6 @@ use App\Repositories\Eloquent\Repository;
 
 class PostsRepository extends Repository
 {
-    public function  __construct()
-    {
-        date_default_timezone_set('America/Chicago');
-    }
 
     /**
      * Specify Model class name
@@ -25,7 +21,7 @@ class PostsRepository extends Repository
      */
     function model()
     {
-        return 'App\Models\Posts';
+        return 'App\Posts';
     }
 
     public function HidePost($id)

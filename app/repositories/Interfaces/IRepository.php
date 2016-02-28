@@ -4,7 +4,7 @@ namespace App\Repositories\Interfaces;
 
 interface IRepository
 {
-    public function All ($columns = array('*'));
+    public function All ();
 
     public function Paginate ($perPage = 15, $columns = array('*'));
 
