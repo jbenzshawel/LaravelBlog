@@ -29,7 +29,7 @@ class CommentsRepository extends Repository
      */
     public function Approve($id)
     {
-        return $this->modal->where('id', $id)->update([ 'Approved' => true]);
+        return $this->Update([ 'Approved' => true], $id);
     }
 
     /**
@@ -38,11 +38,11 @@ class CommentsRepository extends Repository
      */
     public function UnApprove($id)
     {
-        return $this->modal->where('id', $id)->update([ 'Approved' => fale]);
+        return $this->Update([ 'Approved' => false], $id);
     }
 
     public function GetCommentsByPostId($postId)
     {
-        return $this->modal->where('PostID', $postId)->get();
+        return $this->_model->where('PostID', $postId)->get();
     }
 }

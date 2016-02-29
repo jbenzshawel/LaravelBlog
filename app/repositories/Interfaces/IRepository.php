@@ -6,6 +6,8 @@ interface IRepository
 {
     public function All ();
 
+    public function Fields($columns = array('*'));
+
     public function Paginate ($perPage = 15, $columns = array('*'));
 
     public function Create (array $data);

@@ -8,7 +8,6 @@
 
 namespace App\Repositories;
 
-//use App\Repositories\Interfaces\IRepository;
 use App\Repositories\Eloquent\Repository;
 
 class PostsRepository extends Repository
@@ -26,11 +25,31 @@ class PostsRepository extends Repository
 
     public function HidePost($id)
     {
-        return $this->modal->where('id', $id)->update([ 'Visible' => false, 'updated_at', date('Y-m-d H:i:s') ]);
+        return $this->Update([ 'Visible' => false, 'updated_at' => date('Y-m-d H:i:s') ], $id);
     }
 
     public function ShowPost($id)
     {
-        return $this->modal->where('id', $id)->update([ 'Visible' => true, 'updated_at', date('Y-m-d H:i:s') ]);
+        return $this->Update([ 'Visible' => true, 'updated_at'=> date('Y-m-d H:i:s') ], $id);
+    }
+
+    public function Excerpts()
+    {
+        $contentList =  $this->_model->get(['content', 'id']);
+        $excerptList = array();
+        $excerptIds = array();
+        foreach($contentList as $contentObj) {
+            $strippedContent = strip_tags($contentObj->content);
+            if(strlen($strippedContent) > 74) {
+                $offset = 75;
+            } else {
+                $offset= 0;
+            }
+            $excerpt = substr($strippedContent, 0, strpos($strippedContent, ".", $offset) + 1);
+            $excerptIds[$contentObj->id] = $excerpt;
+            array_push($excerptList, ["id" => $contentObj->id, "excerpt" => $excerpt]);
+        }
+        $excerpt = ["ById" => $excerptIds, "List" => $excerptList];
+        return $excerpt;
     }
 }

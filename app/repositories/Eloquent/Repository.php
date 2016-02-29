@@ -8,24 +8,16 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Posts;
-
 use App\Repositories\Interfaces\IRepository;
-//use App\Repositories\Exceptions;
 use Illuminate\Database\Eloquent\Model;
-//use Illuminate\Container\Container as App;
+
 
 abstract class Repository implements IRepository
 {
     /**
-     * @var App
-     */
-    private $app;
-
-    /**
      * @var model
      */
-    protected $model;
+    protected $_model;
 
     /**
      * @param App $app
@@ -34,7 +26,7 @@ abstract class Repository implements IRepository
     public function __construct()
     {
         $modelClass = $this->model();
-        $this->model = new $modelClass();
+        $this->_model = new $modelClass();
     }
 
     /**
@@ -52,7 +44,22 @@ abstract class Repository implements IRepository
     public function All()
     {
 
-        return $this->model->get();
+        return $this->_model->get();
+    }
+
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function Fields($columns = array('*'))
+    {
+        $response = array();
+        if($columns[0] == '*') {
+            $response =  $this->_model->get();
+        } else if (typeOf($columns) == 'array') {
+            $response = $this->_model->get($columns);
+        }
+        return $response;
     }
 
     /**
@@ -62,7 +69,7 @@ abstract class Repository implements IRepository
      */
     public function Paginate($perPage = 15, $columns = array('*'))
     {
-        return $this->model->paginate($perPage, $columns);
+        return $this->_model->paginate($perPage, $columns);
     }
 
     /**
@@ -71,7 +78,7 @@ abstract class Repository implements IRepository
      */
     public function Create(array $data)
     {
-        return $this->model->create($data);
+        return $this->_model->create($data);
     }
 
     /**
@@ -82,7 +89,7 @@ abstract class Repository implements IRepository
      */
     public function Update(array $data, $id, $attribute="id")
     {
-        return $this->model->where($attribute, '=', $id)->update($data);
+        return $this->_model->where($attribute, $id)->update($data);
     }
 
     /**
@@ -91,7 +98,7 @@ abstract class Repository implements IRepository
      */
     public function Delete($id)
     {
-        return $this->model->destroy($id);
+        return $this->_model->destroy($id);
     }
 
     /**
@@ -101,7 +108,7 @@ abstract class Repository implements IRepository
      */
     public function Find($id, $columns = array('*'))
     {
-        return $this->model->find($id, $columns);
+        return $this->_model->find($id, $columns);
     }
 
     /**
@@ -112,7 +119,7 @@ abstract class Repository implements IRepository
      */
     public function FindBy($attribute, $value, $columns = array('*'))
     {
-        return $this->model->where($attribute, '=', $value)->first($columns);
+        return $this->_model->where($attribute, '=', $value)->first($columns);
     }
 
 }
