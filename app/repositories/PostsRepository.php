@@ -35,7 +35,7 @@ class PostsRepository extends Repository
 
     public function Excerpts()
     {
-        $contentList =  $this->_model->get(['content', 'id']);
+        $contentList =  $this->Fields(['content', 'id']);
         $excerptList = array();
         $excerptIds = array();
         foreach($contentList as $contentObj) {
@@ -45,6 +45,7 @@ class PostsRepository extends Repository
             } else {
                 $offset= 0;
             }
+            // create excerpt that is the content ending after the first period passed 75 characters
             $excerpt = substr($strippedContent, 0, strpos($strippedContent, ".", $offset) + 1);
             $excerptIds[$contentObj->id] = $excerpt;
             array_push($excerptList, ["id" => $contentObj->id, "excerpt" => $excerpt]);

@@ -56,7 +56,7 @@ abstract class Repository implements IRepository
         $response = array();
         if($columns[0] == '*') {
             $response =  $this->_model->get();
-        } else if (typeOf($columns) == 'array') {
+        } else if (count($columns) > 0) {
             $response = $this->_model->get($columns);
         }
         return $response;

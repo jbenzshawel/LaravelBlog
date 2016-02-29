@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1fecd8ae-b191-4b8b-9811-02fbba069874" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Comments.php" afterPath="$PROJECT_DIR$/app/Comments.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Posts.php" afterPath="$PROJECT_DIR$/app/Posts.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Repositories/PostsRepository.php" afterPath="$PROJECT_DIR$/app/Repositories/PostsRepository.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/home.blade.php" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/posts.blade.php" afterPath="$PROJECT_DIR$/resources/views/posts.blade.php" />
     </list>
     <ignored path="SimpleCMS.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,11 +37,21 @@
       <file leaf-file-name="PostsController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PostsController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-73.666664">
-              <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
+            <state vertical-scroll-proportion="-21.166666">
+              <caret line="292" column="22" selection-start-line="292" selection-start-column="22" selection-end-line="292" selection-end-column="22" />
               <folding>
                 <element signature="e#40#49#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Comments.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Comments.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.48939642">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -65,8 +69,8 @@
       <file leaf-file-name="CommentsRepository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Repositories/CommentsRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-21.791666">
-              <caret line="47" column="1" selection-start-line="47" selection-start-column="1" selection-end-line="47" selection-end-column="1" />
+            <state vertical-scroll-proportion="-17.416666">
+              <caret line="40" column="62" selection-start-line="40" selection-start-column="62" selection-end-line="40" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -75,18 +79,18 @@
       <file leaf-file-name="PostsRepository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Repositories/PostsRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-26.25">
-              <caret line="47" column="88" selection-start-line="47" selection-start-column="88" selection-end-line="47" selection-end-column="88" />
+            <state vertical-scroll-proportion="-17.791666">
+              <caret line="47" column="56" selection-start-line="47" selection-start-column="56" selection-end-line="47" selection-end-column="56" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Repository.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Repository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Repositories/Eloquent/Repository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.862969">
-              <caret line="124" column="1" selection-start-line="124" selection-start-column="1" selection-end-line="124" selection-end-column="1" />
+            <state vertical-scroll-proportion="4.4583335">
+              <caret line="58" column="19" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
               <folding>
                 <element signature="e#128#172#0#PHP" expanded="true" />
               </folding>
@@ -178,13 +182,13 @@
         <option value="$PROJECT_DIR$/resources/views/home.blade.php" />
         <option value="$PROJECT_DIR$/app/Repositories/Interfaces/IRepository.php" />
         <option value="$PROJECT_DIR$/app/Comments.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" />
         <option value="$PROJECT_DIR$/app/Posts.php" />
         <option value="$PROJECT_DIR$/app/Posts.php" />
         <option value="$PROJECT_DIR$/app/Repositories/Eloquent/Repository.php" />
-        <option value="$PROJECT_DIR$/app/Repositories/CommentsRepository.php" />
         <option value="$PROJECT_DIR$/app/Repositories/PostsRepository.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" />
+        <option value="$PROJECT_DIR$/app/Repositories/CommentsRepository.php" />
       </list>
     </option>
   </component>
@@ -818,24 +822,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Comments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48939642">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PostsController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-73.666664">
-          <caret line="140" column="29" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
-          <folding>
-            <element signature="e#40#49#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Posts.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.25">
@@ -864,29 +850,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Repositories/CommentsRepository.php">
+    <entry file="file://$PROJECT_DIR$/app/Repositories/Eloquent/Repository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-21.791666">
-          <caret line="47" column="1" selection-start-line="47" selection-start-column="1" selection-end-line="47" selection-end-column="1" />
-          <folding />
+        <state vertical-scroll-proportion="4.4583335">
+          <caret line="58" column="19" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
+          <folding>
+            <element signature="e#128#172#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Repositories/PostsRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-26.25">
-          <caret line="47" column="88" selection-start-line="47" selection-start-column="88" selection-end-line="47" selection-end-column="88" />
+        <state vertical-scroll-proportion="-17.791666">
+          <caret line="47" column="56" selection-start-line="47" selection-start-column="56" selection-end-line="47" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Repositories/Eloquent/Repository.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PostsController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.862969">
-          <caret line="124" column="1" selection-start-line="124" selection-start-column="1" selection-end-line="124" selection-end-column="1" />
+        <state vertical-scroll-proportion="-21.166666">
+          <caret line="292" column="22" selection-start-line="292" selection-start-column="22" selection-end-line="292" selection-end-column="22" />
           <folding>
-            <element signature="e#128#172#0#PHP" expanded="true" />
+            <element signature="e#40#49#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Repositories/CommentsRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.416666">
+          <caret line="40" column="62" selection-start-line="40" selection-start-column="62" selection-end-line="40" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Comments.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.48939642">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

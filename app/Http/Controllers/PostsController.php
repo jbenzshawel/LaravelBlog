@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Posts;
-use App\Comments;
 use App\Http\Requests;
 use App\Repositories\PostsRepository;
 use App\Repositories\CommentsRepository;
@@ -272,14 +270,27 @@ class PostsController extends BaseController
      */
     // POST: /posts/updateComment
     private function updateComment(Request $request, $callbackAction) {
-        $class = 'App\Comments';
+        $status = false;
         $comment = $request->all();
         if (isset($comment["commentId"])) {
-           $status = call_user_func_array(array($class, $callbackAction), array($comment["commentId"]));
-           if($status)
-               return true;
+            $status = true;
+            switch ($callbackAction)
+            {
+                case "ApproveComment":
+                    $this->_CommentsRepository->Approve($comment["commentId"]);
+                    break;
+                case "UnApproveComment":
+                    $this->_CommentsRepository->UnApprove($comment["commentId"]);
+                    break;
+                case "DeleteComment":
+                    $this->_CommentsRepository->Delete($comment["commentId"]);
+                    break;
+                default:
+                    $status = false;
+                    break;
+            }
         }
-        return false;
+        return $status;
     }
 
     /**
