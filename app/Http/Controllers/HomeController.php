@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Hash;
-use App\User;
+use App\Repositories\UserRepository;
 use App\Repositories\PostsRepository;
 use App\Repositories\CommentsRepository;
 use App\Http\Requests;
@@ -23,6 +22,13 @@ class HomeController extends Controller
      * @var _CommentsRepository
      */
     private  $_CommentsRepository;
+
+    /**
+     * private
+     * @var _UserRepository
+     */
+    private  $_UserRepository;
+
     /**
      * Create a new controller instance.
      *
@@ -33,6 +39,7 @@ class HomeController extends Controller
         $this->middleware('auth');
         $this->_PostsRepository = new PostsRepository();
         $this->_CommentsRepository = new CommentsRepository();
+        $this->_UserRepository = new UserRepository();
     }
 
     /**
@@ -62,7 +69,7 @@ class HomeController extends Controller
         $status = "false";
         $user = $request->all();
         if (isset($user["name"]) && strlen($user["name"]) > 2) {
-            User::changeName($user["name"], $request->user()->id);
+            $this->_UserRepository->ChangeName($user["name"], $request->user()->id);
             $status = "true";
         }
         return $status;
@@ -79,7 +86,7 @@ class HomeController extends Controller
         $status = "false";
         $user = $request->all();
         if (isset($user["email"]) && filter_var($user["email"], FILTER_VALIDATE_EMAIL)) {
-            User::changeEmail($user["email"], $request->user()->id);
+            $this->_UserRepository->ChangeEmail($user["email"], $request->user()->id);
             $status = "true";
         }
         return $status;
@@ -95,7 +102,7 @@ class HomeController extends Controller
         $status = "false";
         $user = $request->all();
         if(Auth::attempt(['email' => $request->user()->email, 'password' => $user["oldPassword"]])) {
-            User::changePassword(Hash::make($user["newPassword"]), $request->user()->id);
+            $this->_UserRepository->ChangePassword($user["newPassword"], $request->user()->id);
             $status = "true";
         }
         return $status;

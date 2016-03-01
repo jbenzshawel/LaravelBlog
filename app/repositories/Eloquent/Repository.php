@@ -23,7 +23,7 @@ abstract class Repository implements IRepository
      * @param App $app
      *
      */
-    public function __construct()
+    public function __construct ()
     {
         $modelClass = $this->model();
         $this->_model = new $modelClass();
@@ -51,12 +51,10 @@ abstract class Repository implements IRepository
      * @param array $columns
      * @return mixed
      */
-    public function Fields($columns = array('*'))
+    public function Fields(array $columns)
     {
         $response = array();
-        if($columns[0] == '*') {
-            $response =  $this->_model->get();
-        } else if (count($columns) > 0) {
+        if (count($columns) > 0) {
             $response = $this->_model->get($columns);
         }
         return $response;
