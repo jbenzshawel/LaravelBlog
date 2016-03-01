@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Posts;
-use App\Comments;
 use App\Http\Requests;
+use App\Repositories\PostsRepository;
+use App\Repositories\CommentsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 class PostsController extends BaseController
 {
+    /**
+     * @var Posts
+     */
+    private $_PostsRepository;
+
+    private $_CommentsRepository;
+
 	/**
      * Create a new controller instance.
      *
@@ -18,7 +25,10 @@ class PostsController extends BaseController
      */
     public function __construct()
     {
+        date_default_timezone_set('America/Chicago');
         $this->middleware('auth');
+        $this->_PostsRepository = new PostsRepository();
+        $this->_CommentsRepository = new CommentsRepository();
     }
 
     /**
@@ -32,7 +42,9 @@ class PostsController extends BaseController
         $viewData = array(); 
         $viewData["user"] = Auth::user(); 
         $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
-        $viewData["PostList"] = Posts::ListPosts();
+
+        $viewData["PostList"] = $this->_PostsRepository->All();
+        $viewData["PostExcerpts"] = $this->_PostsRepository->Excerpts();
 
         return view('posts', $viewData);
     }
@@ -47,9 +59,9 @@ class PostsController extends BaseController
     public function getPost($id)
     {
         $viewData = array();
-        if(isset($id)) {
-            $viewData["post"] = Posts::GetById($id);
-            $viewData["CommentsList"] = Comments::GetCommentsByPostId($id);
+        if (isset($id)) {
+            $viewData["post"] = $this->_PostsRepository->Find($id);
+            $viewData["CommentsList"] = $this->_CommentsRepository->GetCommentsByPostId($id);
         }
 
         return view('post', $viewData);
@@ -65,9 +77,8 @@ class PostsController extends BaseController
     public function editPost($id)
     {
         $viewData = array();
-        if(isset($id)) {
-            $viewData["post"] = Posts::GetById($id);
-            $viewData["CommentsList"] = Comments::GetCommentsByPostId($id);
+        if (isset($id)) {
+            $viewData["post"] = $this->_PostsRepository->Find($id);
         }
 
         return view('posts/edit', $viewData);
@@ -98,18 +109,34 @@ class PostsController extends BaseController
     {
         $status = "false";
         $post = $request->all();
-        if(!isset($post["userID"])) $post["userID"] = $request->user()->id;
+        if (!isset($post["userID"])) $post["userID"] = $request->user()->id;
         if (isset($post["title"]) && isset($post["content"]) && isset($post["userID"])) {
-            if (isset($post["id"])) {
-                $Posts = new Posts($post["title"], $post["content"], $post["id"], $post["userID"]);
-            } else {
-                $Posts = new Posts($post["title"], $post["content"], "", $post["userID"]);
-            }
-            if ($Posts::SavePost()) {
-                $status = "true";
-            }
+            $this->_PostsRepository->Create([
+               "title" => $post["title"], "content" => $post["content"], "UserID" => $post["userID"], "Visible" => true
+            ]);
+            $status = "true";
         }
+        return $status;
+    }
 
+    /**
+     * Postback for ajax to update a post
+     *
+     * @param \Illuminate\Http\Request content and userID variables
+     * @return string response
+     */
+    // POST: /posts/update
+    public function updatePostback(Request $request)
+    {
+        $status = "false";
+        $post = $request->all();
+        if (!isset($post["userID"])) $post["userID"] = $request->user()->id;
+        if (isset($post["title"]) && isset($post["content"]) && isset($post["PostID"])) {
+            $this->_PostsRepository->Update([
+                "title" => $post["title"], "content" => $post["content"], "Visible" => true, "updated_at" => date("Y-m-d H:i:s")
+            ], $post["PostID"]);
+            $status = "true";
+        }
         return $status;
     }
 
@@ -122,7 +149,7 @@ class PostsController extends BaseController
     // POST: /posts/delete
     public function deletePostback(Request $request)
     {
-        if($this->updatePost($request, 'DeletePost'))
+        if ($this->updatePost($request, 'DeletePost'))
             return "true";
         return "false";
     }
@@ -136,7 +163,7 @@ class PostsController extends BaseController
     // POST: /posts/hide
     public function hidePostback(Request $request)
     {
-        if($this->updatePost($request, 'HidePost'))
+        if ($this->updatePost($request, 'HidePost'))
             return "true";
         return "false";
     }
@@ -150,7 +177,7 @@ class PostsController extends BaseController
     // POST: /posts/show
     public function showPostback(Request $request)
     {
-        if($this->updatePost($request, 'ShowPost'))
+        if ($this->updatePost($request, 'ShowPost'))
             return "true";
         return "false";
     }
@@ -171,19 +198,14 @@ class PostsController extends BaseController
             $email = isset($comment["Email"]) ? $comment["Email"] : "";
             if(!isset($comment["CommentId"])) {
                 if (!$comment["HasParent"]) {
-                    $Comments = new Comments($comment["PostId"], null, $comment["Comment"], null, $comment["Name"], $email);
+                    $this->_CommentsRepository->Create([
+                        "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"]
+                    ]);
                 } else {
-                    $Comments = new Comments($comment["PostId"], null, $comment["Comment"], $comment["ParentId"], $comment["Name"], $email);
+                    $this->_CommentsRepository->Create([
+                        "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"], "ParentID" => $comment["ParentID"]
+                    ]);
                 }
-            } else {
-                if (!$comment["HasParent"]) {
-                    $Comments = new Comments($comment["PostId"], $comment["id"], $comment["Comment"], null, $comment["Name"], $email);
-                } else {
-                    $Comments = new Comments($comment["PostId"], $comment["id"], $comment["Comment"], $comment["ParentId"], $comment["Name"], $email);
-                }
-            }
-
-            if($Comments::SaveComment()) {
                 $status = "true";
             }
         }
@@ -200,7 +222,7 @@ class PostsController extends BaseController
     // POST: /posts/approveComment
     public function approveCommentPostback(Request $request)
     {
-        if($this->updateComment($request, "ApproveComment"))
+        if ($this->updateComment($request, "ApproveComment"))
             return "true";
         return "false";
     }
@@ -214,7 +236,7 @@ class PostsController extends BaseController
     // POST: /posts/unapproveComment
     public function unapproveCommentPostback(Request $request)
     {
-        if($this->updateComment($request, "UnApproveComment"))
+        if ($this->updateComment($request, "UnApproveComment"))
             return "true";
         return "false";
     }
@@ -228,7 +250,7 @@ class PostsController extends BaseController
     // POST: /posts/deleteComment
     public function deleteCommentPostback(Request $request)
     {
-        if($this->updateComment($request, "DeleteComment"))
+        if ($this->updateComment($request, "DeleteComment"))
             return "true";
         return "false";
     }
@@ -242,14 +264,27 @@ class PostsController extends BaseController
      */
     // POST: /posts/updateComment
     private function updateComment(Request $request, $callbackAction) {
-        $class = 'App\Comments';
+        $status = false;
         $comment = $request->all();
-        if (isset($comment["commentId"])) {
-           $status = call_user_func_array(array($class, $callbackAction), array($comment["commentId"]));
-           if($status)
-               return true;
+        if (isset($comment["commentId"]) && gettype($comment["commentId"]) == "integer") {
+            $status = true;
+            switch ($callbackAction)
+            {
+                case "ApproveComment":
+                    $this->_CommentsRepository->Approve($comment["commentId"]);
+                    break;
+                case "UnApproveComment":
+                    $this->_CommentsRepository->UnApprove($comment["commentId"]);
+                    break;
+                case "DeleteComment":
+                    $this->_CommentsRepository->Delete($comment["commentId"]);
+                    break;
+                default:
+                    $status = false;
+                    break;
+            }
         }
-        return false;
+        return $status;
     }
 
     /**
@@ -261,13 +296,26 @@ class PostsController extends BaseController
      */
     // POST: /posts/updatePost
     private function updatePost(Request $request, $callbackAction) {
-        $class= 'App\Posts';
         $post = $request->all();
+        $status = false;
         if (isset($post["postId"]) && gettype($post["postId"]) == "integer") {
-            $status = call_user_func_array(array($class, $callbackAction), array($post["postId"]));
-            if($status)
-                return true;
+            $status = true;
+            switch($callbackAction)
+            {
+                case "DeletePost":
+                    $this->_PostsRepository->Delete($post["postId"]);
+                    break;
+                case "HidePost":
+                    $this->_PostsRepository->HidePost($post["postId"]);
+                    break;
+                case "ShowPost":
+                    $this->_PostsRepository->ShowPost($post["postId"]);
+                    break;
+                default:
+                    $status = false;
+                    break;
+            }
         }
-        return false;
+        return $status;
     }
 }

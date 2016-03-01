@@ -3,15 +3,32 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Hash;
-use App\User;
-use App\Posts;
-use App\Comments;
+use App\Repositories\UserRepository;
+use App\Repositories\PostsRepository;
+use App\Repositories\CommentsRepository;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    /**
+     * private
+     * @var _PostsRepository
+     */
+    private $_PostsRepository;
+
+    /**
+     * private
+     * @var _CommentsRepository
+     */
+    private  $_CommentsRepository;
+
+    /**
+     * private
+     * @var _UserRepository
+     */
+    private  $_UserRepository;
+
     /**
      * Create a new controller instance.
      *
@@ -20,6 +37,9 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->_PostsRepository = new PostsRepository();
+        $this->_CommentsRepository = new CommentsRepository();
+        $this->_UserRepository = new UserRepository();
     }
 
     /**
@@ -33,8 +53,8 @@ class HomeController extends Controller
         $viewData["user"] = Auth::user(); 
         date_default_timezone_set('America/Chicago');
         $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
-        $viewData["CommentList"] = Comments::GetAllComments();
-        $viewData["PostsList"] = Posts::ListPosts();
+        $viewData["CommentList"] = $this->_CommentsRepository->All();
+        $viewData["PostsList"] = $this->_PostsRepository->All();
         return view('home', $viewData);
     }
 
@@ -49,7 +69,7 @@ class HomeController extends Controller
         $status = "false";
         $user = $request->all();
         if (isset($user["name"]) && strlen($user["name"]) > 2) {
-            User::changeName($user["name"], $request->user()->id);
+            $this->_UserRepository->ChangeName($user["name"], $request->user()->id);
             $status = "true";
         }
         return $status;
@@ -66,7 +86,7 @@ class HomeController extends Controller
         $status = "false";
         $user = $request->all();
         if (isset($user["email"]) && filter_var($user["email"], FILTER_VALIDATE_EMAIL)) {
-            User::changeEmail($user["email"], $request->user()->id);
+            $this->_UserRepository->ChangeEmail($user["email"], $request->user()->id);
             $status = "true";
         }
         return $status;
@@ -82,7 +102,7 @@ class HomeController extends Controller
         $status = "false";
         $user = $request->all();
         if(Auth::attempt(['email' => $request->user()->email, 'password' => $user["oldPassword"]])) {
-            User::changePassword(Hash::make($user["newPassword"]), $request->user()->id);
+            $this->_UserRepository->ChangePassword($user["newPassword"], $request->user()->id);
             $status = "true";
         }
         return $status;

@@ -9,10 +9,10 @@
 
                 <div class="panel-body posts">
                     <ul>
-                   @foreach ($PostList as $post)
-                       @if($post["visible"])
-                            <li><h2><a href="/projects/LaravelBlog/public/post/{{ $post["id"] }}">{{ $post["title"] }}</a></h2><p>{!! $post["excerpt"] !!}</p></li>
-                       @endif
+                  @foreach ($PostList as $post)
+                             @if($post->Visible)
+                                   <li><h2><a href="/projects/LaravelBlog/public/post/{{ $post->id }}">{{ $post->title }}</a></h2><p>{{  $PostExcerpts["ById"][$post->id] }}</p></li>
+                              @endif
                    @endforeach
                     </ul>
                 </div>

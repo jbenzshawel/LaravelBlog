@@ -57,22 +57,22 @@
                                 @foreach($PostsList as $post)
                                     <tr>
                                         <td>
-                                            <input type="checkbox" value="{{ $post["id"] }}" data-chbx-post-id="{{ $post["id"] }}" name="post">
+                                            <input type="checkbox" value="{{ $post->id }}" data-chbx-post-id="{{ $post->id }}" name="post">
                                         </td>
                                         <td class="center-text">
-                                            {!! $post["visible"] ? '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' : '' !!}
+                                            {!! $post->Visible ? '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' : '' !!}
                                         </td>
                                         <td>
-                                            {{ $post["id"] }}
+                                            {{ $post->id}}
                                         </td>
                                         <td>
-                                            <a href="/projects/LaravelBlog/public/post/{{ $post["id"] }}/edit">{{ $post["title"] }}</a>
+                                            <a href="/projects/LaravelBlog/public/post/{{ $post->id }}/edit">{{ $post->title }}</a>
                                         </td>
                                         <td>
-                                            {{ date('F d, Y h:i:s A', strtotime($post["dateCreated"])) }}
+                                            {{-- date('F d, Y h:i:s A', strtotime($post->dateCreated) --}}
                                         </td>
                                         <td>
-                                            {{ $post["lastUpdated"]  }}
+                                            {{ $post->lastUpdated  }}
                                         </td>
                                     </tr>
                                 @endforeach
