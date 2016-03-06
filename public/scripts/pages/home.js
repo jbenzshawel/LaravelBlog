@@ -2,7 +2,13 @@
  * Created by addison on 2/24/16.
  */
 "use strict";
+
+// base post url for post requests 
 var postURL = "/projects/LaravelBlog/public/posts";
+
+/////////////////////////////////////////////////////////
+/// Functions for updating comments
+
 function approveComment(commentId) {
     if(!isNaN(parseInt(commentId, 10))) {
         sendCommentId(postURL + "/approveComment", commentId);
@@ -24,6 +30,10 @@ function deleteComment(commentId) {
     }
     return false;
 }
+
+///////////////////////////////////////////////////////////
+/// Functions for updating posts
+
 function showPost(postId) {
     if(!isNaN(parseInt(postId, 10))) {
         sendPostId(postURL + "/show", postId);
@@ -45,6 +55,10 @@ function deletePost(postId) {
     }
     return false;
 }
+
+///////////////////////////////////////////////////////////
+/// Update account settings
+
 function changeUsername(username) {
     LB$.clearErrors();
     if(username.length > 0) {
@@ -95,6 +109,10 @@ function changePassword(oldPassword, newPassword) {
         LB$.post(settings, true, $("#csrf_token").val());
     }
 }
+
+///////////////////////////////////////////////////////
+/// Helper ajax functions
+
 function sendCommentId(url, commentId, csrfToken) {
     if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
     var settings = new Object();
@@ -141,6 +159,9 @@ function sendPostId(url, postId, csrfToken) {
     };
     LB$.post(settings, false, csrfToken);
 }
+
+//////////////////////////////////////////////////////////////////
+/// Capture input events and clearing errors
 
 $(function() {
     $('#commentsTable').DataTable();

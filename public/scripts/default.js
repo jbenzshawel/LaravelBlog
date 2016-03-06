@@ -12,7 +12,7 @@ var LB$ = {
         return regex.test(email);
     },
     // $LB.validatePasswordLength
-    // @param password = string to validate id = id of input field 
+    // @param password = string to validate id = id of input field
     validatePasswordLength : function (password, id) {
         if(password.trim() == "" && password.trim().length < 5) {
             $(id).addError("Password must be at least 5 characters long");
@@ -80,8 +80,10 @@ var LB$ = {
         if (action == 'update') $(msgId).html(updateMsg);
     }
 };
-
+// jquery functions
 $(function() {
+    // $(target).addError
+    // @params errorMsg = message to add, field = name of field (used for targeting with LB$.updateInputField)
     $.fn.addError = function(errorMsg, field) {
         if (field == undefined) field = "";
         $(this).find('.error-message').remove();
