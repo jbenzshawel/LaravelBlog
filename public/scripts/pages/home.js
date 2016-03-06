@@ -92,7 +92,7 @@ function changePassword(oldPassword, newPassword) {
             }
             return true;
         };
-        LB$ajaxPost(settings, true, $("#csrf_token").val());
+        LB$.ajaxPost(settings, true, $("#csrf_token").val());
     }
 }
 function sendCommentId(url, commentId, csrfToken) {

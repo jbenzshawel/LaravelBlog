@@ -27,7 +27,7 @@ var LB$ = {
     clearModalErrors : function clearModalErrors(modal) {
         $(modal).on('hidden.bs.modal', function () {
             var id = $(this).find('form').attr('id');
-            clearErrors(id);
+            this.clearErrors(id);
         });
     },
     updateInputField : function updateInputField(field) {
