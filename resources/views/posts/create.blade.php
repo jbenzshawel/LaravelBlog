@@ -63,7 +63,7 @@
                                               "Your post has been created!</div>");
                 }
             };
-            LB$.ajaxPost(settings, true, $("#crsf_token").val());
+            LB$.post(settings, true, $("#crsf_token").val());
         }
     }
 

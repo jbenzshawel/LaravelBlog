@@ -58,7 +58,7 @@ function changeUsername(username) {
                 return true;
             }
         };
-        LB$.ajaxPost(settings, true, $("#csrf_token").val());
+        LB$.post(settings, true, $("#csrf_token").val());
     }
 }
 function changeEmail(email) {
@@ -75,7 +75,7 @@ function changeEmail(email) {
 
             return true;
         };
-        LB$.ajaxPost(settings, true, $("#csrf_token").val());
+        LB$.post(settings, true, $("#csrf_token").val());
     }
 }
 
@@ -92,7 +92,7 @@ function changePassword(oldPassword, newPassword) {
             }
             return true;
         };
-        LB$.ajaxPost(settings, true, $("#csrf_token").val());
+        LB$.post(settings, true, $("#csrf_token").val());
     }
 }
 function sendCommentId(url, commentId, csrfToken) {
@@ -116,7 +116,7 @@ function sendCommentId(url, commentId, csrfToken) {
             return true;
         }
     };
-    LB$.ajaxPost(settings, false, csrfToken);
+    LB$.post(settings, false, csrfToken);
 }
 function sendPostId(url, postId, csrfToken) {
     if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
@@ -139,7 +139,7 @@ function sendPostId(url, postId, csrfToken) {
             return true;
         }
     };
-    LB$.ajaxPost(settings, false, csrfToken);
+    LB$.post(settings, false, csrfToken);
 }
 
 $(function() {

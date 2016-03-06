@@ -115,7 +115,7 @@
                     $("#createComment").hide();
                 }
             };
-            LB$.ajaxPost(settings, true, $("#csrf_token").val());
+            LB$.post(settings, true, $("#csrf_token").val());
         }
     }
 

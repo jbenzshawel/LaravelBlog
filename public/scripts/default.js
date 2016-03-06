@@ -5,18 +5,18 @@
 
 // create LB$ object to store default functions
 var LB$ = {
-    validateEmail : function validateEmail(email) {
+    validateEmail : function (email) {
         var regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(email);
     },
-    validatePasswordLength : function validatePasswordLength(password, id) {
+    validatePasswordLength : function (password, id) {
         if(password.trim() == "" && password.trim().length < 5) {
             $(id).addError("Password must be at least 5 characters long");
             return false;
         }
         return true;
     },
-    clearErrors : function clearErrors(formId) {
+    clearErrors : function (formId) {
         $(".input-error").removeClass("input-error");
         $(".error-message").remove();
         if (formId != undefined) {
@@ -24,13 +24,13 @@ var LB$ = {
             form.reset();
         }
     },
-    clearModalErrors : function clearModalErrors(modal) {
+    clearModalErrors : function (modal) {
         $(modal).on('hidden.bs.modal', function () {
             var id = $(this).find('form').attr('id');
             this.clearErrors(id);
         });
     },
-    updateInputField : function updateInputField(field) {
+    updateInputField : function (field) {
         $(field).change(function () {
             if (this.value != "") {
                 $(this).removeClass("input-error");
@@ -38,7 +38,7 @@ var LB$ = {
             }
         });
     },
-    ajaxPost : function ajaxPost(settings, async, csrfToken) {
+    post : function (settings, async, csrfToken) {
         if (async == undefined) async = true;
         if (csrfToken == undefined) return false;
         if (typeof(settings) === 'object') {
@@ -49,7 +49,7 @@ var LB$ = {
             $.ajax(settings);
         }
     },
-    alertMsg : function alertMsg(type, action, msgId) {
+    alertMsg : function (type, action, msgId) {
         if (type == undefined) return false;
         var deleteMsg = '<div class="alert alert-success alert-dismissible" role="alert">' +
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
