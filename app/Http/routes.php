@@ -34,8 +34,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::auth();
     // get routes
     Route::get('/dashboard', 'HomeController@index');
-    Route::get('/post/{id}', 'PostsController@getPost');
-    Route::get('/posts', 'PostsController@index');
+    Route::get('/post/{id}', 'PublicController@getPost');
+    Route::get('/posts', 'PublicController@index');
     Route::get('/posts/create', 'PostsController@create');
     Route::get('/post/{id}/edit', 'PostsController@editPost');
     // post routes
@@ -50,7 +50,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/posts/delete', 'PostsController@deletePostback');
     Route::post('/posts/create', 'PostsController@createPostback');
     Route::post('/posts/update', 'PostsController@updatePostback');
-    Route::post('/posts/createComment', 'PostsController@createCommentPostback');
+    Route::post('/posts/createComment', 'PublicController@createCommentPostback');
     Route::post('/posts/updatePagination', 'PostsController@updatePagination');
 
 });

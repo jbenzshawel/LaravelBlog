@@ -40,11 +40,10 @@
                                 <div role="tabpanel" class="tab-pane" id="profile"> <div class="posts-section">
                                         <h2>Manage Posts</h2>
                                         <div id="resPostMsg"></div>
-                                        <h4>Pagination</h4>
                                         <dl class="dl-horizontal">
                                             <dt><label for="pagination">Posts per page:</label></dt>
                                             <dd>
-                                                    <input type="text" maxlength="2" class="form-control" id="pagination" style="width:15%;display: inline;margin-right: 15px;">
+                                                    <input type="text" maxlength="2" class="form-control" id="pagination" style="width:15%;display: inline;margin-right: 15px;" value="{{ Auth::user()->pagination }}">
 
                                                     <button type="subbmit" id="submitPagination" class="btn btn-default" style="display:inline;">Update</button>
 
@@ -147,7 +146,7 @@
                                                             <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
                                                         </td>
                                                         <td>
-                                                            {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}
+                                                            {{ date('F d, Y h:i:s A', strtotime($comment->created_at)) }}
                                                         </td>
                                                     </tr>
                                                 @endforeach

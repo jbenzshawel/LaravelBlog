@@ -33,42 +33,6 @@ class PostsController extends BaseController
     }
 
     /**
-     * Show posts list
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // GET: /posts/
-    public function index()
-    {
-        $viewData = array(); 
-        $viewData["user"] = Auth::user(); 
-        $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
-
-        $viewData["PostList"] = $this->_PostsRepository->Paginate(Auth::user()->pagination);
-        $viewData["PostExcerpts"] = $this->_PostsRepository->Excerpts();
-
-        return view('posts', $viewData);
-    }
-
-    /**
-     * Show posts by id
-     *
-     * @param int post id
-     * @return \Illuminate\Http\Response
-     */
-    // GET: /posts/{id}
-    public function getPost($id)
-    {
-        $viewData = array();
-        if (isset($id)) {
-            $viewData["post"] = $this->_PostsRepository->Find($id);
-            $viewData["CommentsList"] = $this->_CommentsRepository->GetCommentsByPostId($id);
-        }
-
-        return view('post', $viewData);
-    }
-
-    /**
      * Get posts by id to edit
      *
      * @param int post id
@@ -191,36 +155,6 @@ class PostsController extends BaseController
             return "true";
         }
         return "false";
-    }
-
-    /**
-     * Postback for ajax to save a comment
-     *
-     * @param \Illuminate\Http\Request
-     * @return string response
-     */
-    // POST: /posts/createComment
-    public function createCommentPostback(Request $request)
-    {
-        $status = "false";
-        $comment = $request->all();
-        if (isset($comment["PostId"]) && isset($comment["Comment"]) && isset($comment["HasParent"]) && isset($comment["Name"])) {
-            $email = isset($comment["Email"]) ? $comment["Email"] : "";
-            if(!isset($comment["CommentId"])) {
-                if (!$comment["HasParent"]) {
-                    $this->_CommentsRepository->Create([
-                        "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"]
-                    ]);
-                } else {
-                    $this->_CommentsRepository->Create([
-                        "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"], "ParentID" => $comment["ParentID"]
-                    ]);
-                }
-                $status = "true";
-            }
-        }
-
-        return $status;
     }
 
     /**
