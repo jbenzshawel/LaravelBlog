@@ -46,7 +46,7 @@ function deletePost(postId) {
     return false;
 }
 function changeUsername(username) {
-    clearErrors();
+    LB$.clearErrors();
     if(username.length > 0) {
         var settings = new Object();
         settings.url = "/projects/LaravelBlog/public/user/changeName";
@@ -58,12 +58,12 @@ function changeUsername(username) {
                 return true;
             }
         };
-        ajaxPost(settings, true, $("#csrf_token").val());
+        LB$.ajaxPost(settings, true, $("#csrf_token").val());
     }
 }
 function changeEmail(email) {
-    clearErrors();
-    if (email.length > 0 && validateEmail(email)) {
+    LB$.clearErrors();
+    if (email.length > 0 && LB$.validateEmail(email)) {
         var settings = new Object();
         settings.url = "/projects/LaravelBlog/public/user/changeEmail";
         settings.data = JSON.stringify({ email : email });
@@ -75,7 +75,7 @@ function changeEmail(email) {
 
             return true;
         };
-        ajaxPost(settings, true, $("#csrf_token").val());
+        LB$.ajaxPost(settings, true, $("#csrf_token").val());
     }
 }
 
@@ -92,7 +92,7 @@ function changePassword(oldPassword, newPassword) {
             }
             return true;
         };
-        ajaxPost(settings, true, $("#csrf_token").val());
+        LB$ajaxPost(settings, true, $("#csrf_token").val());
     }
 }
 function sendCommentId(url, commentId, csrfToken) {
@@ -103,20 +103,20 @@ function sendCommentId(url, commentId, csrfToken) {
     settings.success = function(data) {
         if(data == "true") {
             if (url.indexOf("unapprove") > 0) {
-                $("input[data-chbx-cmt-id='" + commentId + "']").next('td').html('');
-                alertMsg('Comment(s)', 'update', '#resCmtMsg');
+                $("input[data-chbx-cmt-id='" + commentId + "']").parent().next('td').html('');
+                LB$.alertMsg('Comment(s)', 'update', '#resCmtMsg');
             } else if (url.indexOf("approve") > 0) {
-                $("input[data-chbx-cmt-id='" + commentId + "']").next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
-                alertMsg('Comment(s)', 'update', '#resCmtMsg');
+                $("input[data-chbx-cmt-id='" + commentId + "']").parent().next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+                LB$.alertMsg('Comment(s)', 'update', '#resCmtMsg');
             } else if (url.indexOf("delete") > 0) {
                 $("input[data-chbx-cmt-id='" + commentId + "']").parent().parent().remove();
-                alertMsg('Comment(s)', 'delete', '#resCmtMsg');
+                LB$.alertMsg('Comment(s)', 'delete', '#resCmtMsg');
             }
             $("input[name='comment']").prop("checked", false);
             return true;
         }
     };
-    ajaxPost(settings, false, csrfToken);
+    LB$.ajaxPost(settings, false, csrfToken);
 }
 function sendPostId(url, postId, csrfToken) {
     if(csrfToken == undefined) csrfToken = $("#csrf_token").val();
@@ -126,20 +126,20 @@ function sendPostId(url, postId, csrfToken) {
     settings.success = function(data) {
         if(data == "true") {
             if (url.indexOf("hide") > 0) {
-                $("input[data-chbx-post-id='" + postId + "']").parent().closest('td').next('td').html('');
-                alertMsg('Post(s)', 'update', '#resPostMsg');
+                $("input[data-chbx-post-id='" + postId + "']").parent().next('td').html('');
+                LB$.alertMsg('Post(s)', 'update', '#resPostMsg');
             } else if (url.indexOf("show") > 0) {
-                $("input[data-chbx-post-id='" + postId + "']").parent().closest('td').next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
-                alertMsg('Post(s)', 'update', '#resPostMsg');
+                $("input[data-chbx-post-id='" + postId + "']").parent().next('td').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+                LB$.alertMsg('Post(s)', 'update', '#resPostMsg');
             } else if (url.indexOf("delete") > 0) {
                 $("input[data-chbx-post-id='" + postId + "']").parent().parent().remove();
-                alertMsg('Post(s)', 'delete', '#resPostMsg');
+                LB$.alertMsg('Post(s)', 'delete', '#resPostMsg');
             }
             $("input[name='post']").prop("checked", false);
             return true;
         }
     };
-    ajaxPost(settings, false, csrfToken);
+    LB$.ajaxPost(settings, false, csrfToken);
 }
 
 $(function() {
@@ -243,12 +243,12 @@ $(function() {
     });
     $("#passwordForm").submit(function(e) {
         e.preventDefault();
-        clearErrors();
+        LB$.clearErrors();
         var isValid = true;
-        if (validatePasswordLength($("#oldPassword").val(), "#oldPassword") == false) {
+        if (LB$.validatePasswordLength($("#oldPassword").val(), "#oldPassword") == false) {
             isValid = false;
         }
-        if (validatePasswordLength($("#newPassword").val(), "#newPassword") == false) {
+        if (LB$.validatePasswordLength($("#newPassword").val(), "#newPassword") == false) {
             isValid = false;
         }
         if ($("#newPassword").val() != $("#confirmPassword").val()) {
@@ -262,11 +262,11 @@ $(function() {
     // set modals to clear form errors on close
     var modals = ["#changePasswordModal", "#changeNameModal", "#changeEmailModal"];
     for(var i = 0, modal; modal = modals[i++];) {
-        clearModalErrors(modal);
+        LB$.clearModalErrors(modal);
     }
     // add input field listener to clear error messages on change
     var inputs = ["#email", "#username", "#oldPassword", "#newPassword", "#confirmPassword"];
     for(var j = 0, input; input = inputs[j++];) {
-        updateInputField(input);
+        LB$.updateInputField(input);
     }
 });

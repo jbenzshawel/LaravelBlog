@@ -75,7 +75,7 @@
             parentId = null;
             hasParent = false;
         }
-        clearErrors();
+        LB$.clearErrors();
         var $name = $("#name");
         var $email = $("#email");
         var $comment = $("#comment");
@@ -86,7 +86,7 @@
             $name.addError("The name field is required", "name");
             isValid = false;
         }
-        if(!validateEmail($email.val())) {
+        if(!LB$.validateEmail($email.val())) {
             $email.addError("A valid email is required", "email");
             isValid = false;
         }
@@ -115,7 +115,7 @@
                     $("#createComment").hide();
                 }
             };
-            ajaxPost(settings, true, $("#csrf_token").val());
+            LB$.ajaxPost(settings, true, $("#csrf_token").val());
         }
     }
 
@@ -133,7 +133,7 @@
             var replyId = $("[id=replyComment]:visible").attr("data-replyId");
             $("[id=replyComment]:visible").hide();
             $("[data-commentId=" + replyId + "]").show();
-            clearErrors(true, "createComment");
+            LB$.clearErrors("createComment");
         });
         $(document).on('click', '.reply', function(e) {
             e.preventDefault();
@@ -146,7 +146,7 @@
         });
         var fieldIds = [ "#name", "#email", "#comment" ];
         for (var i = 0, field; field = fieldIds[i++];) {
-            updateInputField(field);
+            LB$.updateInputField(field);
         }
     });
 </script>

@@ -131,10 +131,10 @@ class PostsController extends BaseController
         $status = "false";
         $post = $request->all();
         if (!isset($post["userID"])) $post["userID"] = $request->user()->id;
-        if (isset($post["title"]) && isset($post["content"]) && isset($post["PostID"])) {
+        if (isset($post["title"]) && isset($post["content"]) && isset($post["id"])) {
             $this->_PostsRepository->Update([
                 "title" => $post["title"], "content" => $post["content"], "Visible" => true, "updated_at" => date("Y-m-d H:i:s")
-            ], $post["PostID"]);
+            ], $post["id"]);
             $status = "true";
         }
         return $status;

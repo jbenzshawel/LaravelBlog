@@ -49,5 +49,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/posts/show', 'PostsController@showPostback');
     Route::post('/posts/delete', 'PostsController@deletePostback');
     Route::post('/posts/create', 'PostsController@createPostback');
+    Route::post('/posts/update', 'PostsController@updatePostback');
     Route::post('/posts/createComment', 'PostsController@createCommentPostback');
+
 });

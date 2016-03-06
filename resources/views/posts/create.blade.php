@@ -34,7 +34,7 @@
 <script type="text/javascript">
     'use strict';
     function createPost() {
-        clearErrors();
+        LB$.clearErrors();
         var $title = $("#title");
         var content = $("#content").code();
         var userID = "{{ $user->id }}";
@@ -63,7 +63,7 @@
                                               "Your post has been created!</div>");
                 }
             };
-            ajaxPost(settings, true, $("#crsf_token").val());
+            LB$.ajaxPost(settings, true, $("#crsf_token").val());
         }
     }
 

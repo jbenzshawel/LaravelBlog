@@ -35,7 +35,7 @@
     'use strict';
     var post = {!! json_encode($post) !!};
     function updatePost() {
-        clearErrors();
+        LB$.clearErrors();
         var $title = $("#title");
         var content = $("#content").code();
         var isValid = true;
@@ -54,7 +54,7 @@
                 content : content
             };
             var settings = new Object(); 
-            settings.url = "/projects/LaravelBlog/public/posts/create";
+            settings.url = "/projects/LaravelBlog/public/posts/update";
             settings.data = JSON.stringify(model),
             settings.success = function(data) {
                 if(data == "true") {
@@ -63,7 +63,7 @@
                                               "Your post has been updated!</div>");
                 }
             };
-            ajaxPost(settings, true, $("#crsf_token").val());
+            LB$.ajaxPost(settings, true, $("#crsf_token").val());
         }
     }
 
