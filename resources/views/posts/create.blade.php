@@ -55,7 +55,7 @@
             };
             var settings = new Object(); 
             settings.url = "/projects/LaravelBlog/public/posts/create";
-            settings.data = JSON.stringify(model),
+            settings.data = JSON.stringify(model);
             settings.success = function(data) {
                 if(data == "true") {
                     $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
