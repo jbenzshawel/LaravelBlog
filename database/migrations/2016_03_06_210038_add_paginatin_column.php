@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateCommentsTableStructure extends Migration
+class AddPaginatinColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateCommentsTableStructure extends Migration
     public function up()
     {
         //
-        Schema::table('comments', function($table){
-           $table->foreign('PostID')->references('id')->on('posts');
+        Schema::table('users', function($table){
+            $table->integer('pagination');
         });
     }
 
@@ -26,10 +26,9 @@ class UpdateCommentsTableStructure extends Migration
     public function down()
     {
         //
-        Schema::table('comments', function($table) {
-           $table->foreign('PostID')
-                ->references('id')->on('posts')
-                ->onDelete('cascade');
+
+        Schema::table('users', function($table){
+            $table->dropColumn('pagination');
         });
     }
 }

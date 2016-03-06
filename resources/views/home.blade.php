@@ -11,134 +11,159 @@
                 <div class="panel-body">
                     <input type="hidden" name="csrf-token" value="{{ csrf_token() }}" id="csrf_token"/>
                     <div class="account-section">
-                        <h2>Your Account</h2>
-                        <dl class="dl-horizontal">
-                            <dt>Name:</dt>
-                            <dd><span id="name">{{ $user->name }}</span> <a href="#" id="changeUsername"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+                        <div>
 
-                            <dt>Email:</dt>
-                            <dd><span id="emailSpan">{{ $user->email }}</span> <a href="#" id="changeEmail"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Account Settings</a></li>
+                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Posts</a></li>
+                                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Comments</a></li>
 
-                            <dt>Password:</dt>
-                            <dd>•••••••• <a href="#" id="changePassword"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+                            </ul>
 
-                            <dt>Last updated:</dt>
-                            <dd>{{ $lastUpdated }}</dd>
-                        </dl>
-                    </div>
-                    <div class="posts-section">
-                        <h2>Manage Posts</h2>
-                        <div id="resPostMsg"></div>
-                        <table id="postsTable" class="display table">
-                            <thead>
-                            <tr>
-                                <th>
-                                    &nbsp;
-                                </th>
-                                <th>
-                                    Visible
-                                </th>
-                                <th>
-                                    Post ID
-                                </th>
-                                <th>
-                                    Post Title
-                                </th>
-                                <th>
-                                    Date Created
-                                </th>
-                                <th>
-                                    Last Updated
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @if(isset($PostsList))
-                                @foreach($PostsList as $post)
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" value="{{ $post->id }}" data-chbx-post-id="{{ $post->id }}" name="post">
-                                        </td>
-                                        <td class="center-text">
-                                            {!! $post->Visible ? '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' : '' !!}
-                                        </td>
-                                        <td>
-                                            {{ $post->id}}
-                                        </td>
-                                        <td>
-                                            <a href="/projects/LaravelBlog/public/post/{{ $post->id }}/edit">{{ $post->title }}</a>
-                                        </td>
-                                        <td>
-                                            {{-- date('F d, Y h:i:s A', strtotime($post->dateCreated) --}}
-                                        </td>
-                                        <td>
-                                            {{ $post->lastUpdated  }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                            </tbody>
-                        </table>
-                        <div class="form-group">
-                            <button class="btn btn-danger" data-toggle="modal" id="deletePostModal">Delete Selected</button>
-                            <button class="btn btn-warning" id="hidePosts">Hide Selected</button>
-                            <button class="btn btn-success" id="showPosts">Show Selected</button>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="home"><h2>Your Account</h2>
+                                    <dl class="dl-horizontal">
+                                        <dt>Name:</dt>
+                                        <dd><span id="name">{{ $user->name }}</span> <a href="#" id="changeUsername"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+
+                                        <dt>Email:</dt>
+                                        <dd><span id="emailSpan">{{ $user->email }}</span> <a href="#" id="changeEmail"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+
+                                        <dt>Password:</dt>
+                                        <dd>•••••••• <a href="#" id="changePassword"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></dd>
+
+                                        <dt>Last updated:</dt>
+                                        <dd>{{ $lastUpdated }}</dd>
+                                    </dl></div>
+                                <div role="tabpanel" class="tab-pane" id="profile"> <div class="posts-section">
+                                        <h2>Manage Posts</h2>
+                                        <div id="resPostMsg"></div>
+                                        <h4>Pagination</h4>
+                                        <dl class="dl-horizontal">
+                                            <dt><label for="pagination">Posts per page:</label></dt>
+                                            <dd>
+                                                    <input type="text" maxlength="2" class="form-control" id="pagination" style="width:15%;display: inline;margin-right: 15px;">
+
+                                                    <button type="subbmit" id="submitPagination" class="btn btn-default" style="display:inline;">Update</button>
+
+                                            </dd>
+                                        </dl>
+
+                                        <table id="postsTable" class="display table">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    &nbsp;
+                                                </th>
+                                                <th>
+                                                    Visible
+                                                </th>
+                                                <th>
+                                                    Post ID
+                                                </th>
+                                                <th>
+                                                    Post Title
+                                                </th>
+                                                <th>
+                                                    Date Created
+                                                </th>
+                                                <th>
+                                                    Last Updated
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @if(isset($PostsList))
+                                                @foreach($PostsList as $post)
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" value="{{ $post->id }}" data-chbx-post-id="{{ $post->id }}" name="post">
+                                                        </td>
+                                                        <td class="center-text">
+                                                            {!! $post->Visible ? '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' : '' !!}
+                                                        </td>
+                                                        <td>
+                                                            {{ $post->id}}
+                                                        </td>
+                                                        <td>
+                                                            <a href="/projects/LaravelBlog/public/post/{{ $post->id }}/edit">{{ $post->title }}</a>
+                                                        </td>
+                                                        <td>
+                                                            {{-- date('F d, Y h:i:s A', strtotime($post->dateCreated) --}}
+                                                        </td>
+                                                        <td>
+                                                            {{ $post->lastUpdated  }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                            </tbody>
+                                        </table>
+                                        <div class="form-group">
+                                            <button class="btn btn-danger" data-toggle="modal" id="deletePostModal">Delete Selected</button>
+                                            <button class="btn btn-warning" id="hidePosts">Hide Selected</button>
+                                            <button class="btn btn-success" id="showPosts">Show Selected</button>
+                                        </div>
+                                    </div></div>
+                                <div role="tabpanel" class="tab-pane" id="messages"><div class="comments-section">
+                                        <h2>Approve Comments</h2>
+                                        <div id="resCmtMsg"></div>
+                                        <table id="commentsTable" class="display table" style="width: 85%;">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    &nbsp;
+                                                </th>
+                                                <th>
+                                                    Approved
+                                                </th>
+                                                <th>
+                                                    Post ID
+                                                </th>
+                                                <th>
+                                                    Commenter
+                                                </th>
+                                                <th>
+                                                    Date
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @if(isset($CommentList))
+                                                @foreach($CommentList as $comment)
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" value="{{ $comment->ID }}" data-chbx-cmt-id="{{ $comment->ID }}" name="comment">
+                                                        </td>
+                                                        <td class="center-text">
+                                                            {!! filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' :  '' !!}
+                                                        </td>
+                                                        <td>
+                                                            {{ $comment->PostID }}
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
+                                                        </td>
+                                                        <td>
+                                                            {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                            </tbody>
+                                        </table>
+                                        <div class="form-group">
+                                            <button class="btn btn-danger" data-toggle="modal" id="deleteCommentModal">Delete Selected</button>
+                                            <button class="btn btn-warning" id="unapproveComments">Hide Selected</button>
+                                            <button class="btn btn-success" id="approveComments">Approve Selected</button>
+                                        </div>
+                                    </div>
+                                </div></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="comments-section">
-                        <h2>Approve Comments</h2>
-                        <div id="resCmtMsg"></div>
-                        <table id="commentsTable" class="display table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        &nbsp;
-                                    </th>
-                                    <th>
-                                        Approved
-                                    </th>
-                                    <th>
-                                        Post ID
-                                    </th>
-                                    <th>
-                                        Commenter
-                                    </th>
-                                    <th>
-                                        Date
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            @if(isset($CommentList))
-                                @foreach($CommentList as $comment)
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" value="{{ $comment->ID }}" data-chbx-cmt-id="{{ $comment->ID }}" name="comment">
-                                        </td>
-                                        <td class="center-text">
-                                            {!! filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' :  '' !!}
-                                        </td>
-                                        <td>
-                                            {{ $comment->PostID }}
-                                        </td>
-                                        <td>
-                                            <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
-                                        </td>
-                                        <td>
-                                            {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                            </tbody>
-                        </table>
-                        <div class="form-group">
-                            <button class="btn btn-danger" data-toggle="modal" id="deleteCommentModal">Delete Selected</button>
-                            <button class="btn btn-warning" id="unapproveComments">Hide Selected</button>
-                            <button class="btn btn-success" id="approveComments">Approve Selected</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

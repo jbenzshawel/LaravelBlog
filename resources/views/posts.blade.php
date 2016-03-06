@@ -15,6 +15,10 @@
                               @endif
                    @endforeach
                     </ul>
+
+                    <div class="col-xs-4 col-xs-offset-4">
+                        {!! $PostList->links() !!}
+                    </div>
                 </div>
             </div>
         </div>

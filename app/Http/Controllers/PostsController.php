@@ -6,17 +6,17 @@ use Auth;
 use App\Http\Requests;
 use App\Repositories\PostsRepository;
 use App\Repositories\CommentsRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 class PostsController extends BaseController
 {
-    /**
-     * @var Posts
-     */
     private $_PostsRepository;
 
     private $_CommentsRepository;
+
+    private $_UserRepository;
 
 	/**
      * Create a new controller instance.
@@ -29,6 +29,7 @@ class PostsController extends BaseController
         $this->middleware('auth');
         $this->_PostsRepository = new PostsRepository();
         $this->_CommentsRepository = new CommentsRepository();
+        $this->_UserRepository = new UserRepository();
     }
 
     /**
@@ -43,7 +44,7 @@ class PostsController extends BaseController
         $viewData["user"] = Auth::user(); 
         $viewData["lastUpdated"] = date('F d, Y, g:i a', strtotime(Auth::user()->updated_at));
 
-        $viewData["PostList"] = $this->_PostsRepository->All();
+        $viewData["PostList"] = $this->_PostsRepository->Paginate(Auth::user()->pagination);
         $viewData["PostExcerpts"] = $this->_PostsRepository->Excerpts();
 
         return view('posts', $viewData);
@@ -182,6 +183,15 @@ class PostsController extends BaseController
         return "false";
     }
 
+    public function updatePagination(Request $request)
+    {
+        $post = $request->all();
+        if(isset($post["pagination"])) {
+            $this->_UserRepository->Update(['pagination' => $post["pagination"]], $request->user()->id);
+            return "true";
+        }
+        return "false";
+    }
 
     /**
      * Postback for ajax to save a comment

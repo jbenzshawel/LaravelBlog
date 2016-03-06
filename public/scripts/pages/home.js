@@ -3,7 +3,7 @@
  */
 "use strict";
 
-// base post url for post requests 
+// base post url for post requests
 var postURL = "/projects/LaravelBlog/public/posts";
 
 /////////////////////////////////////////////////////////
@@ -54,6 +54,22 @@ function deletePost(postId) {
         return true;
     }
     return false;
+}
+function updatePagination(pages) {
+    if(!isNaN(parseInt(pages, 10))) {
+        var settings = {
+            url: postURL + "/updatePagination",
+            data: JSON.stringify({ pagination: pages }),
+            success: function (data) {
+                if (data == "true") {
+                    LB$.alertMsg("pagination", "update", "#resPostMsg");
+                    $("#pagination").val('');
+                    LB$.clearErrors();
+                }
+            }
+        }
+        LB$.post(settings, true, $("#csrf_token").val());
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -246,6 +262,15 @@ $(function() {
         e.preventDefault();
         $("#changePasswordModal").modal('show');
     });
+    $("#submitPagination").click(function(e) {
+        e.preventDefault();
+        var pagination = parseInt($("#pagination").val(), 10);
+        if(!isNaN(pagination)) {
+            updatePagination(pagination);
+        } else {
+            $("#pagination").addError("&nbsp;&nbsp;You did not enter a number", "pagination", "#submitPagination");
+        }
+    });
     $("#nameForm").submit(function(e) {
         e.preventDefault();
         if ($("#username").val() != "" && $("#username").val().length > 3) {
@@ -256,7 +281,7 @@ $(function() {
     });
     $("#emailForm").submit(function(e) {
         e.preventDefault();
-        if ($("#email").val() != "" && validateEmail($("#email").val())) {
+        if ($("#email").val() != "" && LB$.validateEmail($("#email").val())) {
             changeEmail($("#email").val());
         } else {
             $("#email").addError("The email must be of the format address@example.com", "email");
@@ -286,7 +311,7 @@ $(function() {
         LB$.clearModalErrors(modal);
     }
     // add input field listener to clear error messages on change
-    var inputs = ["#email", "#username", "#oldPassword", "#newPassword", "#confirmPassword"];
+    var inputs = ["#email", "#username", "#oldPassword", "#newPassword", "#confirmPassword", '#pagination'];
     for(var j = 0, input; input = inputs[j++];) {
         LB$.updateInputField(input);
     }

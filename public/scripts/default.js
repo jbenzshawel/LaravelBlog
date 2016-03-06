@@ -70,11 +70,11 @@ var LB$ = {
         if (type == undefined) return false;
         var deleteMsg = '<div class="alert alert-success alert-dismissible" role="alert">' +
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-            '<strong>Success!</strong> ' + type + ' have been deleted.' +
+            '<strong>Success!</strong> ' + type + ' has been deleted.' +
             '</div>';
         var updateMsg = '<div class="alert alert-success alert-dismissible" role="alert">' +
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-            '<strong>Success!</strong> ' + type + ' status have been updated.' +
+            '<strong>Success!</strong> ' + type + ' has been updated.' +
             '</div>';
         if (action == 'delete') $(msgId).html(deleteMsg);
         if (action == 'update') $(msgId).html(updateMsg);
@@ -84,10 +84,14 @@ var LB$ = {
 $(function() {
     // $(target).addError
     // @params errorMsg = message to add, field = name of field (used for targeting with LB$.updateInputField)
-    $.fn.addError = function(errorMsg, field) {
+    $.fn.addError = function(errorMsg, field, altId) {
         if (field == undefined) field = "";
-        $(this).find('.error-message').remove();
-        $(this).after("<div class=\"" + field + " error-message text-danger\">" + errorMsg + "</div>");
+        var targetId = this;
+        if (altId != undefined) {
+            targetId = altId;
+        }
+        $(targetId).find('.error-message').remove();
+        $(targetId).after("<div class=\"" + field + " error-message text-danger\">" + errorMsg + "</div>");
         $(this).addClass("input-error");
     };
 });
