@@ -26,6 +26,15 @@ Route::get('/', function () {
 |
 */
 
+// Disable registration routes
+Route::get('/register', function() {
+    return "";
+});
+Route::post('/register', function() {
+    return "";
+});
+
+
 Route::group(['middleware' => ['web']], function () {
     //
 });

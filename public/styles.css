@@ -63,6 +63,10 @@ h2 a:hover {
 	text-align: center;
 }
 
+.login-link a {
+	color: #f8f8f8 !important;
+}
+
 #postsTable_filter, #commentsTable_filter {
 	display: none;
 }

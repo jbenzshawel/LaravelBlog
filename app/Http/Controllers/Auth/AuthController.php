@@ -21,6 +21,7 @@ class AuthController extends Controller
     |
     */
 
+    // User registration disabled since there only needs to be one admin
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
@@ -40,35 +41,26 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => 'logout', 'checkSession']);
     }
 
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    // disable registration
+    public function showRegistrationForm()
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+        return redirect('posts');
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
+    public function register()
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+
+    }
+
+    protected function validator()
+    {
+
+    }
+
+   // disable registration
+    protected function create()
+    {
+
     }
 
 }

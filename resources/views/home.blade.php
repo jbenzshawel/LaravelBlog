@@ -90,7 +90,7 @@
                                                             <a href="/projects/LaravelBlog/public/post/{{ $post->id }}/edit">{{ $post->title }}</a>
                                                         </td>
                                                         <td>
-                                                            {{-- date('F d, Y h:i:s A', strtotime($post->dateCreated) --}}
+                                                            {{ date('F d, Y h:i:s A', strtotime($post->dateCreated)) }}
                                                         </td>
                                                         <td>
                                                             {{ $post->lastUpdated  }}

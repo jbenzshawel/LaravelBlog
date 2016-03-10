@@ -45,7 +45,9 @@
                         </div>
 
                         <div class="comment-list col-md-10 col-md-offset-1" id="listComments">
-                            <a href="#" id="newComment" style="font-weight: 300">New Comment</a>
+                            <div style="text-align: center;width:100%;">
+                                <a href="#" id="newComment" style="font-weight: 300">New Comment</a>
+                            </div>
 
                         @if($CommentsList != null)
                                 @foreach($CommentsList as $comment)

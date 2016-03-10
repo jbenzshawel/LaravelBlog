@@ -61,13 +61,18 @@ abstract class Repository implements IRepository
     }
 
     /**
+     * Get visble posts paginated
+     *
      * @param int $perPage
      * @param array $columns
      * @return mixed
      */
     public function Paginate($perPage = 15, $columns = array('*'))
     {
-        return $this->_model->paginate($perPage, $columns);
+        return $this->_model
+                ->where('Visible', 1)
+                ->orderBy('updated_at', 'desc')
+                ->paginate($perPage, $columns);
     }
 
     /**

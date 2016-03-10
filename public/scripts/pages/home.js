@@ -84,6 +84,7 @@ function changeUsername(username) {
         settings.success = function(data) {
             if (data == "true") {
                 $("#name").html(username);
+                $("#user-name").html(username);
                 $("#changeNameModal").modal('hide');
                 return true;
             }
