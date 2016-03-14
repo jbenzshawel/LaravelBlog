@@ -41,12 +41,15 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
+
     // get routes
     Route::get('/dashboard', 'HomeController@index');
     Route::get('/post/{id}', 'PublicController@getPost');
     Route::get('/posts', 'PublicController@index');
     Route::get('/posts/create', 'PostsController@create');
     Route::get('/post/{id}/edit', 'PostsController@editPost');
+    Route::get('/feed', 'PublicController@feed');
+
     // post routes
     Route::post('/user/changeName', 'HomeController@changeNamePostback');
     Route::post('/user/changeEmail', 'HomeController@changeEmailPostback');

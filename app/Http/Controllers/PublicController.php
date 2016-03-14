@@ -51,6 +51,21 @@ class PublicController extends BaseController
     }
 
     /**
+     * Show posts list
+     *
+     * @return \Illuminate\Http\Response
+     */
+    // GET: /posts/
+    public function feed()
+    {
+        $viewData = array();
+        $viewData["posts"] = $this->_PostsRepository->All();
+        $viewData["PostExcerpts"] = $this->_PostsRepository->Excerpts();
+
+        return view('feed', $viewData);
+    }
+
+    /**
      * Show posts by id
      *
      * @param int post id

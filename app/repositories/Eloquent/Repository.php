@@ -71,7 +71,7 @@ abstract class Repository implements IRepository
     {
         return $this->_model
                 ->where('Visible', 1)
-                ->orderBy('updated_at', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->paginate($perPage, $columns);
     }
 

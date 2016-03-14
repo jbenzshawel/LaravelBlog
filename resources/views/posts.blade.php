@@ -11,12 +11,22 @@
                     <ul>
                   @foreach ($PostList as $post)
                              @if($post->Visible)
-                                   <li><h2><a href="/projects/LaravelBlog/public/post/{{ $post->id }}">{{ $post->title }}</a></h2><p>{{  $PostExcerpts["ById"][$post->id] }}</p></li>
+                                   <li>
+                                       <h2>
+                                           <a href="/projects/LaravelBlog/public/post/{{ $post->id }}">
+                                               {{ $post->title }}
+                                           </a>
+                                       </h2>
+                                       <span class="post-date">{{ date("m.d.y", strtotime($post->created_at)) }}</span>
+                                       <p>
+                                           {{  $PostExcerpts["ById"][$post->id] }}
+                                       </p>
+                                   </li>
                               @endif
                    @endforeach
                     </ul>
 
-                    <div class="col-xs-4 col-xs-offset-4">
+                    <div class="col-xs-3 col-xs-offset-5">
                         {!! $PostList->links() !!}
                     </div>
                 </div>
