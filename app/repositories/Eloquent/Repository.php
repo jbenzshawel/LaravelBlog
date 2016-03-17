@@ -101,7 +101,7 @@ abstract class Repository implements IRepository
      */
     public function Delete($id)
     {
-        return $this->_model->destroy($id);
+        return $this->_model->where('id', $id)->delete();
     }
 
     /**

@@ -207,7 +207,8 @@ class PostsController extends BaseController
      * @return bool response of callback function
      */
     // POST: /posts/updateComment
-    private function updateComment(Request $request, $callbackAction) {
+    private function updateComment(Request $request, $callbackAction)
+    {
         $status = false;
         $comment = $request->all();
         if (isset($comment["commentId"]) && gettype($comment["commentId"]) == "integer") {
@@ -239,7 +240,8 @@ class PostsController extends BaseController
      * @return bool response of callback function
      */
     // POST: /posts/updatePost
-    private function updatePost(Request $request, $callbackAction) {
+    private function updatePost(Request $request, $callbackAction)
+    {
         $post = $request->all();
         $status = false;
         if (isset($post["postId"]) && gettype($post["postId"]) == "integer") {

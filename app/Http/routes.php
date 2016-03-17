@@ -62,7 +62,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/posts/delete', 'PostsController@deletePostback');
     Route::post('/posts/create', 'PostsController@createPostback');
     Route::post('/posts/update', 'PostsController@updatePostback');
-    Route::post('/posts/createComment', 'PublicController@createCommentPostback');
     Route::post('/posts/updatePagination', 'PostsController@updatePagination');
+    Route::post('/posts/createComment', 'PublicController@createCommentPostback');
+
 
 });

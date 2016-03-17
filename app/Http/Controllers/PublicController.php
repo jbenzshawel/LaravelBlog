@@ -96,18 +96,17 @@ class PublicController extends BaseController
         $comment = $request->all();
         if (isset($comment["PostId"]) && isset($comment["Comment"]) && isset($comment["HasParent"]) && isset($comment["Name"])) {
             $email = isset($comment["Email"]) ? $comment["Email"] : "";
-            if(!isset($comment["CommentId"])) {
-                if (!$comment["HasParent"]) {
-                    $this->_CommentsRepository->Create([
-                        "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"]
-                    ]);
-                } else {
-                    $this->_CommentsRepository->Create([
-                        "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"], "ParentID" => $comment["ParentID"]
-                    ]);
-                }
-                $status = "true";
+            if (!$comment["HasParent"]) {
+                $this->_CommentsRepository->Create([
+                    "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"]
+                ]);
+            } else {
+                $this->_CommentsRepository->Create([
+                    "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"], "ParentID" => $comment["ParentID"]
+                ]);
             }
+            $status = "true";
+
         }
 
         return $status;
