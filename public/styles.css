@@ -88,3 +88,7 @@ h2 a:hover {
 .panel-heading {
 	font-weight: 200;
 }
+
+.reply-list {
+	margin-left:40px
+}

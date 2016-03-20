@@ -90,10 +90,10 @@
                                                             <a href="/projects/LaravelBlog/public/post/{{ $post->id }}/edit">{{ $post->title }}</a>
                                                         </td>
                                                         <td>
-                                                            {{ date('F d, Y h:i:s A', strtotime($post->dateCreated)) }}
+                                                            {{ date('F d, Y h:i:s A', strtotime($post->created_at)) }}
                                                         </td>
                                                         <td>
-                                                            {{ $post->lastUpdated  }}
+                                                            {{ date('F d, Y h:i:s A', strtotime($post->updated_at))  }}
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -134,7 +134,7 @@
                                                 @foreach($CommentList as $comment)
                                                     <tr>
                                                         <td>
-                                                            <input type="checkbox" value="{{ $comment->ID }}" data-chbx-cmt-id="{{ $comment->ID }}" name="comment">
+                                                            <input type="checkbox" value="{{ $comment->id }}" data-chbx-cmt-id="{{ $comment->id }}" name="comment">
                                                         </td>
                                                         <td class="center-text">
                                                             {!! filter_var($comment->Approved, FILTER_VALIDATE_BOOLEAN) ?  '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>' :  '' !!}
@@ -143,7 +143,7 @@
                                                             {{ $comment->PostID }}
                                                         </td>
                                                         <td>
-                                                            <a href="#" class="showComment" data-commentId="{{ $comment->ID }}">{{ $comment->Name }}</a>
+                                                            <a href="#" class="showComment" data-commentId="{{ $comment->id }}">{{ $comment->Name }}</a>
                                                         </td>
                                                         <td>
                                                             {{ date('F d, Y h:i:s A', strtotime($comment->created_at)) }}
@@ -169,7 +169,7 @@
 </div>
     @if(isset($CommentList))
         @foreach($CommentList as $comment)
-            <div class="modal fade" tabindex="-1" id="modal-{{ $comment->ID }}" role="dialog">
+            <div class="modal fade" tabindex="-1" id="modal-{{ $comment->id }}" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">

@@ -41,8 +41,21 @@ class CommentsRepository extends Repository
         return $this->Update([ 'Approved' => false ], $id, "ID");
     }
 
+    /**
+     * @param $postId
+     * @return array
+     */
     public function GetCommentsByPostId($postId)
     {
-        return $this->_model->where('PostID', $postId)->get();
+        $commentsList = array();
+        $comments =  $this->_model->where('PostID', $postId)->get();
+        foreach($comments as $comment) {
+            if (isset($comment->ParentID) && $comment->Approved) {
+               array_push($commentsList[$comment->ParentID]["reply"], $comment);
+            } else {
+                $commentsList[$comment->id] = array("content" => $comment, "reply" => array());
+            }
+        }
+        return $commentsList;
     }
 }

@@ -102,7 +102,7 @@ class PublicController extends BaseController
                 ]);
             } else {
                 $this->_CommentsRepository->Create([
-                    "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"], "ParentID" => $comment["ParentID"]
+                    "Name" => $comment["Name"], "Email" => $email, "Comment" => $comment["Comment"], "PostID" =>$comment["PostId"], "ParentID" => $comment["ParentId"]
                 ]);
             }
             $status = "true";

@@ -8,6 +8,7 @@
                     <div class="panel-heading"><a href="/projects/LaravelBlog/public/posts">Posts</a>&nbsp;&nbsp;>&nbsp;&nbsp;{{ $post->title }}</div>
                     <div class="panel-body posts">
                         <h2>{{ $post->title }}</h2>
+                        <p><span class="post-date">{{ date("m.d.y", strtotime($post->created_at)) }}</span></p>
                         <p>{!! $post->content !!}</p>
 
                         <h2>Comments</h2>
@@ -48,17 +49,43 @@
                             <div style="text-align: center;width:100%;">
                                 <a href="#" id="newComment" style="font-weight: 300">New Comment</a>
                             </div>
-
                         @if($CommentsList != null)
+                            <ul class="list-unstyled">
                                 @foreach($CommentsList as $comment)
-                                    @if(isset($comment) && $comment->Approved)
-                                    <div class="comment">
-                                        <header>{{ $comment->Name }} <em> {{ date('F d, Y h:i:s A', strtotime($comment->DateCreated)) }}</em></header>
-                                        <p>{{ $comment->Comment }}</p>
-                                        <footer><a href="#" class="reply" data-commentId="{{$comment->ID}}">reply</a></footer>
-                                    </div>
+                                     @if(isset($comment["content"]) && $comment["content"]->Approved)
+
+                                        <li class="comment">
+                                        <header>{{ $comment["content"]->Name }}</header>
+                                        <p>
+                                            <em>
+                                                <span class="post-date">
+                                                    {{ date('m.d.y h:i:s A', strtotime($comment["content"]->created_at)) }}
+                                                </span>
+                                            </em>
+                                        </p>
+                                        <p>{{ $comment["content"]->Comment }}</p>
+                                        <footer><a href="#" class="reply" data-commentId="{{$comment["content"]->id}}">reply</a></footer>
+                                        @if(count($comment["reply"]) > 0)
+                                        @foreach($comment["reply"] as $reply)
+                                             <ul class="reply-list list-unstyled">
+                                                <li class="comment">
+                                                    <header>{{ $reply->Name }}</header>
+                                                    <p>
+                                                        <em>
+                                                <span class="post-date">
+                                                    {{ date('m.d.y h:i:s A', strtotime($reply->created_at)) }}
+                                                </span>
+                                                        </em>
+                                                    </p>
+                                                    <p>{{ $reply->Comment }}</p>
+                                                </li>
+                                            </ul>
+                                            @endforeach
+                                        @endif
+                                    </li>
                                     @endif
                                 @endforeach
+                            </ul>
                             @endif
                         </div>
 
@@ -71,16 +98,13 @@
 @section('scripts')
 <script type="text/javascript">
     "use strict";
-    function createComment(parentId) {
+    function saveComment($name, $email, $comment, parentId) {
         var hasParent = true;
         if (parentId  == undefined) {
             parentId = null;
             hasParent = false;
         }
         LB$.clearErrors();
-        var $name = $("#name");
-        var $email = $("#email");
-        var $comment = $("#comment");
         var postId =  "{{ $post->id }}";
         var isValid = true;
 
@@ -111,10 +135,9 @@
             settings.data = JSON.stringify(model);
             settings.success = function(data) {
                 if(data == "true") {
-                    $("#postbackResult").html("<div class=\"alert alert-success alert-dismissable\">" +
-                            "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
-                            "Your comment has been created! Once it has been reviewed it will be displayed.</div>");
+                    $("#postbackResult").html("<div class='alert alert-success alert-dismissable'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Your comment has been created! Once it has been reviewed it will be displayed.</div>");
                     $("#createComment").hide();
+                    $("#saveComment").remove();
                 }
             };
             LB$.post(settings, true, $("#csrf_token").val());
@@ -131,20 +154,27 @@
         $(document).on('click', '.hideComment', function (e) {
             e.preventDefault();
             $("#createComment").hide();
+            $("#saveComment").hide();
             $("#newComment").show();
             var replyId = $("[id=replyComment]:visible").attr("data-replyId");
             $("[id=replyComment]:visible").hide();
             $("[data-commentId=" + replyId + "]").show();
             LB$.clearErrors("createComment");
+            LB$.clearErrors("saveComment");
         });
         $(document).on('click', '.reply', function(e) {
             e.preventDefault();
-            $(this).after('<form id="replyComment" data-replyId="' + $(this).attr("data-commentId") + '">' + $("#createComment").html() + '</form>');
+            $(this).after('<form id="saveComment" data-replyId="' + $(this).attr("data-commentId") + '">' + $("#createComment").html().replace('saveComment', 'replyComment') + '</form>');
+            $("#replyComment").attr("data-parentId", $(this).attr("data-commentId"));
             $(this).hide();
+        });
+        $(document).on('click', '#replyComment', function (e) {
+            e.preventDefault();
+            saveComment($("#saveComment input[name='name']"), $("#saveComment input[name='email']"), $("#saveComment textarea[name='comment']"), $(this).attr("data-parentId"));
         });
         $("#saveComment").click(function (e) {
             e.preventDefault();
-            createComment();
+            saveComment($("#createComment input[name='name']"), $("#createComment input[name='email']"), $("#createComment textarea[name='comment']"));
         });
         var fieldIds = [ "#name", "#email", "#comment" ];
         for (var i = 0, field; field = fieldIds[i++];) {
