@@ -16,8 +16,8 @@ LB$.validateEmail = function (email) {
 // @param password = string to validate id = id of input field
 // @return bool (adds error message if false)
 LB$.validatePasswordLength = function (password, id) {
-    if(password.trim() == "" && password.trim().length < 5) {
-        $(id).addError("Password must be at least 5 characters long");
+    if(password.trim() == "" || password.trim().length < 5) {
+        $(id).addError(ErrorMessages.PasswordLength);
         return false;
     }
     return true;

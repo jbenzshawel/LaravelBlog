@@ -119,7 +119,7 @@ function changePassword(oldPassword, newPassword) {
             if(data == "true") {
                 $("#changePasswordModal").modal('hide');
             } else {
-                $("#oldPassword").addError("Old password is not correct");
+                $("#oldPassword").addError(ErrorMessages.IncorrectOldPassword);
             }
             return true;
         };
@@ -269,7 +269,7 @@ $(function() {
         if(!isNaN(pagination)) {
             updatePagination(pagination);
         } else {
-            $("#pagination").addError("&nbsp;&nbsp;You did not enter a number", "pagination", "#submitPagination");
+            $("#pagination").addError(ErrorMessages.InvalidNumber, "pagination", "#submitPagination");
         }
     });
     $("#nameForm").submit(function(e) {
@@ -277,7 +277,7 @@ $(function() {
         if ($("#username").val() != "" && $("#username").val().length > 3) {
             changeUsername($("#username").val());
         } else {
-            $("#username").addError("The name field must be at least 3 characters long", "username");
+            $("#username").addError(ErrorMessages.NameLength, "username");
         }
     });
     $("#emailForm").submit(function(e) {
@@ -285,7 +285,7 @@ $(function() {
         if ($("#email").val() != "" && LB$.validateEmail($("#email").val())) {
             changeEmail($("#email").val());
         } else {
-            $("#email").addError("The email must be of the format address@example.com", "email");
+            $("#email").addError(ErrorMessages.Email, "email");
         }
     });
     $("#passwordForm").submit(function(e) {
@@ -299,7 +299,7 @@ $(function() {
             isValid = false;
         }
         if ($("#newPassword").val() != $("#confirmPassword").val()) {
-            $("#confirmPassword").addError("Confirm password does not match new password");
+            $("#confirmPassword").addError(ErrorMessages.PasswordNotMatch);
             isValid = false;
         }
         if (isValid) {

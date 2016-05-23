@@ -40,11 +40,11 @@
         var content = $("#content").code();
         var isValid = true;
         if($title.val().trim().length == 0 || $title.val() == "") {
-            $title.addError("The title field is required");
+            $title.addError(ErrorMessages.Title);
             isValid = false; 
         }
         if(content.trim().length == 0 || content == "") {
-            $("#content").addError("The title content is required");
+            $("#content").addError();
             isValid = false;
         }
         if(isValid) {
