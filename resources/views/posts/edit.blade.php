@@ -44,7 +44,7 @@
             isValid = false; 
         }
         if(content.trim().length == 0 || content == "") {
-            $("#content").addError();
+            $("#content").addError(ErrorMessages.Content);
             isValid = false;
         }
         if(isValid) {

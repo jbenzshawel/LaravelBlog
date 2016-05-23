@@ -92,17 +92,15 @@ LB$.alertMsg = function (type, action, msgId) {
 };
 
 // jquery functions
-$(function() {
-    // $(target).addError
-    // @params errorMsg = message to add, field = name of field (used for targeting with LB$.updateInputField)
-    $.fn.addError = function(errorMsg, field, altId) {
-        if (field == undefined) field = "";
-        var targetId = this;
-        if (altId != undefined) {
-            targetId = altId;
-        }
-        $(targetId).find('.error-message').remove();
-        $(targetId).after("<div class=\"" + field + " error-message text-danger\">" + errorMsg + "</div>");
-        $(this).addClass("input-error");
-    };
-});
+// $(target).addError
+// @params errorMsg = message to add, field = name of field (used for targeting with LB$.updateInputField)
+$.fn.addError = function(errorMsg, field, altId) {
+    if (field == undefined) field = "";
+    var targetId = this;
+    if (altId != undefined) {
+        targetId = altId;
+    }
+    $(targetId).find('.error-message').remove();
+    $(targetId).after("<div class=\"" + field + " error-message text-danger\">" + errorMsg + "</div>");
+    $(this).addClass("input-error");
+};
