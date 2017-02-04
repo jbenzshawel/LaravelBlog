@@ -5,3 +5,4 @@ Homestead.json
 .env
 /config/database.php
 /public/scripts/vendor/*
+/public/styles/codemirror/*
