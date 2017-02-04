@@ -71,6 +71,7 @@
     function createPost() {
         LB$.clearErrors();
         var $title = $("#title");
+        var content = contentEditor.getValue();
         //var content = $("#content").code();
         var userID = "{{ $user->id }}";
         var isValid = true;
