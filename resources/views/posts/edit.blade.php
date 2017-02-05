@@ -30,6 +30,7 @@
                         </div>
 
                             <div id="content">
+                                <label for="content-editor">Content</label>
                                  <textarea id="content-editor">
                                     {!! $post->content !!}
                                 </textarea>
@@ -47,7 +48,6 @@
 @endsection
 
 @section('scripts')
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.5.1/summernote.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     'use strict';
     var mixedMode = {

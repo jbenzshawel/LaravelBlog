@@ -9,7 +9,8 @@
                     <div class="panel-body posts">
                         <h2>{{ $post->title }}</h2>
                         <p><span class="post-date">{{ date("m.d.y", strtotime($post->created_at)) }}</span></p>
-                        <p>{!! $post->content !!}</p>
+
+                        {!! $post->content !!}
 
                         <h2>Comments</h2>
                         <div class="new-comment">
